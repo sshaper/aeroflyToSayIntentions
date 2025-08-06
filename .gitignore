@@ -1,4 +1,5 @@
 # Aerofly FS4 to SayIntentionsAI Bridge - Git Ignore File
 
 # Developer files and backups
-developer_files/ 
+developer_files/
+.gitignore 
