@@ -1359,16 +1359,34 @@
     "name": "Hall of Justice Heliport",
     "lat": 37.774898529052734,
     "lon": -122.40499877929688,
-    "link": "unavailable",
-    "freq": []
+    "link": "https://skyvector.com/airport/CA26/Hall-of-Justice-Heliport",
+    "freq": [
+      {
+        "description": "AWOS-AV",
+        "frequency_mhz": 119.925
+      },
+      {
+        "description": "D-ATIS",
+        "frequency_mhz": 133.775
+      }
+    ]
   },
   {
     "icao": "CA27",
     "name": "Alcatraz Heliport",
     "lat": 37.825912,
     "lon": -122.421448,
-    "link": "unavailable",
-    "freq": []
+    "link": "https://skyvector.com/airport/CA27/Alcatraz-Heliport",
+    "freq": [
+      {
+        "description": "AWOS-AV at 18CN",
+        "frequency_mhz": 119.925
+      },
+      {
+        "description": "D-ATIS at OAK",
+        "frequency_mhz": 133.775
+      }
+    ]
   },
   {
     "icao": "CA51",
@@ -1679,8 +1697,17 @@
     "name": "San Francisco VA Medical Center Heliport",
     "lat": 37.783331,
     "lon": -122.506389,
-    "link": "unavailable",
-    "freq": []
+    "link": "https://skyvector.com/airport/CN02/San-Francisco-Va-Medical-Center-Heliport",
+    "freq": [
+      {
+        "description": "AWOS",
+        "frequency_mhz": 119.925
+      },
+      {
+        "description": "D-ATIS",
+        "frequency_mhz": 118.85
+      }
+    ]
   },
   {
     "icao": "CYTB",
@@ -33096,7 +33123,7 @@
     "name": "Ann Arbor Municipal Airport",
     "lat": 42.2229995728,
     "lon": -83.74559783939999,
-    "link": "unavailable",
+    "link": "https://skyvector.com/airport/ARB/Ann-Arbor-Municipal-Airport",
     "freq": [
       {
         "description": "A/D",
@@ -41875,7 +41902,7 @@
     "name": "Coleman A. Young Municipal Airport",
     "lat": 42.40919876,
     "lon": -83.00990295,
-    "link": "unavailable",
+    "link": "https://skyvector.com/airport/DET/Coleman-A-Young-Municipal-Airport",
     "freq": [
       {
         "description": "A/D",
@@ -42982,7 +43009,7 @@
     "name": "Detroit Metropolitan Wayne County Airport",
     "lat": 42.21377,
     "lon": -83.353786,
-    "link": "unavailable",
+    "link": "https://skyvector.com/airport/DTW/Detroit-Metro-Wayne-County-Airport",
     "freq": [
       {
         "description": "APP",
@@ -46950,7 +46977,7 @@
     "name": "Bishop International Airport",
     "lat": 42.96540069580078,
     "lon": -83.74359893798828,
-    "link": "unavailable",
+    "link": "https://skyvector.com/airport/FNT/Bishop-International-Airport",
     "freq": [
       {
         "description": "A/D",
@@ -48229,7 +48256,7 @@
     "name": "Grand Canyon National Park Airport",
     "lat": 35.9524,
     "lon": -112.147003,
-    "link": "unavailable",
+    "link": "https://skyvector.com/airport/GCN/Grand-Canyon-Ntl-Park-Airport",
     "freq": [
       {
         "description": "ASOS",
@@ -50404,7 +50431,7 @@
     "name": "Half Moon Bay Airport",
     "lat": 37.513401031499995,
     "lon": -122.500999451,
-    "link": "unavailable",
+    "link": "https://skyvector.com/airport/HAF/Half-Moon-Bay-Airport",
     "freq": [
       {
         "description": "A/D",
@@ -64932,7 +64959,7 @@
     "name": "San Francisco Bay Oakland International Airport",
     "lat": 37.720085,
     "lon": -122.221184,
-    "link": "unavailable",
+    "link": "https://skyvector.com/airport/OAK/Oakland-International-Airport",
     "freq": [
       {
         "description": "APP",
@@ -69490,7 +69517,7 @@
     "name": "Oakland County International Airport",
     "lat": 42.665500640869,
     "lon": -83.420097351074,
-    "link": "unavailable",
+    "link": "https://skyvector.com/airport/PTK/Oakland-County-International-Airport",
     "freq": [
       {
         "description": "A/D",
@@ -73614,7 +73641,7 @@
     "name": "San Francisco International Airport",
     "lat": 37.619806,
     "lon": -122.374821,
-    "link": "unavailable",
+    "link": "https://skyvector.com/airport/SFO/San-Francisco-International-Airport",
     "freq": [
       {
         "description": "APP",
