@@ -2,9 +2,16 @@ This is the original script that gets the data from Aerofly.  It served as my ba
 
 https://gist.github.com/jlgabriel/fff943a5eb056dc4af664f8e27114996
 
+Read the instructions.pdf file to see how to set up and install this application.
+
+I created a part one and part two demo videos that shows it working found at the following.
+
+Part one
+https://www.youtube.com/watch?v=HdENvmPJ-hk
+
+Part two
+https://www.youtube.com/watch?v=gdEtbueMu3A
 
 
-http://localhost:8080/index.html
-http://192.168.4.35:8080/index.html
-python -m http.server 8080
+
 
