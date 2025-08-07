@@ -4,6 +4,8 @@ This application allows you to connect Aerofly fs4 to SayIntentions ATC using VR
 
 **VERY IMPORTANT:** Read the `instructions.pdf` file to see how to set up and install this application.
 
+Improvements and features to this project will be documented in the changLog.txt file.
+
 I created a part one and part two demo videos that shows it working.
 
 ### Part one  

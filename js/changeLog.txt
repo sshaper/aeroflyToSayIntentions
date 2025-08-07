@@ -1,0 +1,3 @@
+This is a change log file to document changes to the application.
+
+08/7/2025  - Updated the Map interface to work better in VR.  Added more skyvector links and frequencies to the data/all_airports.json file
