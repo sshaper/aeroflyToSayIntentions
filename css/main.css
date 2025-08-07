@@ -28,6 +28,7 @@ html, body {
       left: 100px;
       z-index: 1000;
       display: flex;
+      flex-direction: column;
       gap: 10px;
       align-items: center;
     }
@@ -36,7 +37,7 @@ html, body {
     .map-controls {
       position: fixed;
       top: 20px;
-      left: 320px;
+      left: 220px;
       z-index: 1000;
       display: none;
       gap: 15px;
@@ -47,26 +48,55 @@ html, body {
       display: flex;
     }
     
-     .map-selector select {
-       padding: 12px 15px;
-       font-size: 16px;
-       font-weight: bold;
+     /* Radio button styles for map selector */
+     .map-selector .radio-group {
+       display: flex;
+       gap: 15px;
+       align-items: center;
+     }
+     
+     .map-selector .radio-option {
+       display: flex;
+       align-items: center;
+       gap: 8px;
        background-color: white;
-       color: #333;
-       border: 2px solid #007bff;
+       padding: 12px 0px;
        border-radius: 8px;
+       border: 2px solid #007bff;
        cursor: pointer;
-       min-width: 200px;
-       transition: border-color 0.3s;
+       transition: all 0.3s;
+       min-width: 120px;
+       justify-content: center;
      }
      
-     .map-selector select:hover {
+     .map-selector .radio-option:hover {
        border-color: #0056b3;
+       background-color: #f8f9fa;
      }
      
-     .map-selector select:focus {
-       outline: none;
+     .map-selector .radio-option input[type="radio"] {
+       width: 20px;
+       height: 20px;
+       cursor: pointer;
+       margin: 0;
+     }
+     
+     .map-selector .radio-option input[type="radio"]:checked + .radio-label {
+       font-weight: bold;
+       color: #007bff;
+     }
+     
+     .map-selector .radio-option:has(input[type="radio"]:checked) {
        border-color: #28a745;
+       background-color: #d4edda;
+     }
+     
+     .map-selector .radio-label {
+       font-size: 14px;
+       font-weight: normal;
+       color: #333;
+       cursor: pointer;
+       white-space: nowrap;
      }
      
      .airport-toggle {

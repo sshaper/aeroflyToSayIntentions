@@ -10,19 +10,28 @@
 <body>
   <!-- Navigation Buttons -->
   <div class="nav-buttons">
-    <button class="nav-button active" onclick="showPage('map')">Map</button>
-    <button class="nav-button" onclick="showPage('radio')">Radio</button>
+    <button class="nav-button" onclick="showPage('map')" style="display: none;">Map</button>
+    <button class="nav-button active" onclick="showPage('radio')">Radio</button>
   </div>
   
      <!-- Map Controls -->
    <div class="map-controls active" id="map-controls">
      <div class="top-row-controls">
        <div class="map-selector">
-         <select id="map-tile-selector" onchange="changeMapTile()">
-           <option value="OpenStreetMap">OpenStreetMap</option>
-           <option value="OpenTopoMap">OpenTopoMap</option>
-           <option value="Esri.WorldImagery">Satellite (Esri)</option>
-         </select>
+         <div class="radio-group">
+           <label class="radio-option">
+             <input type="radio" name="map-tile" value="OpenStreetMap" checked onchange="changeMapTile()">
+             <span class="radio-label">Map</span>
+           </label>
+           <label class="radio-option">
+             <input type="radio" name="map-tile" value="OpenTopoMap" onchange="changeMapTile()">
+             <span class="radio-label">Topo</span>
+           </label>
+           <label class="radio-option">
+             <input type="radio" name="map-tile" value="Esri.WorldImagery" onchange="changeMapTile()">
+             <span class="radio-label">Sat</span>
+           </label>
+         </div>
        </div>
        
        <div class="airport-toggle">

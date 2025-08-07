@@ -4,53 +4,283 @@
     "name": "Gray Butte Field",
     "lat": 34.566631,
     "lon": -117.670666,
-    "link": "unavailable",
-    "freq": []
+    "link": "https://skyvector.com/airport/04CA/Gray-Butte-Field-Airport",
+    "freq": [
+      {
+        "description": "CTAF",
+        "frequency_mhz": 122.9
+      },
+      {
+        "description": "RMP",
+        "frequency_mhz": 119.99
+      },
+      {
+        "description": "CTR",
+        "frequency_mhz": 126.35
+      },
+      {
+        "description": "FSS",
+        "frequency_mhz": 122.2
+      },
+      {
+        "description": "RCHK",
+        "frequency_mhz": 118.01
+      }
+    ]
+
   },
   {
     "icao": "07FA",
     "name": "Ocean Reef Club Airport",
     "lat": 25.325399398804,
     "lon": -80.274803161621,
-    "link": "unavailable",
+    "link": "https://skyvector.com/airport/07FA/Ocean-Reef-Club-Airport",
     "freq": [
-      {
-        "description": "UNIC",
-        "frequency_mhz": 122.7
-      }
-    ]
+    {
+      "description": "AWOS-3T",
+      "frequency_mhz": 119.025
+    },
+    {
+      "description": "AWOS-3T Tel",
+      "frequency_mhz": 305.3673013
+    },
+    {
+      "description": "BNFSH STAR",
+      "frequency_mhz": 124.85
+    },
+    {
+      "description": "BNFSH STAR (UHF)",
+      "frequency_mhz": 263.025
+    },
+    {
+      "description": "VACAY DP",
+      "frequency_mhz": 125.5
+    },
+    {
+      "description": "FROGZ STAR",
+      "frequency_mhz": 120.5
+    },
+    {
+      "description": "FROGZ STAR (UHF)",
+      "frequency_mhz": 350.225
+    },
+    {
+      "description": "CSTAL STAR",
+      "frequency_mhz": 124.85
+    },
+    {
+      "description": "CSTAL STAR (UHF)",
+      "frequency_mhz": 263.025
+    },
+    {
+      "description": "LUUCE STAR",
+      "frequency_mhz": 126.05
+    },
+    {
+      "description": "LUUCE STAR (7000 FT)",
+      "frequency_mhz": 133.775
+    },
+    {
+      "description": "LUUCE STAR (UHF)",
+      "frequency_mhz": 251.1
+    },
+    {
+      "description": "LUUCE STAR (UHF 7000 FT)",
+      "frequency_mhz": 371.9
+    },
+    {
+      "description": "UNICOM",
+      "frequency_mhz": 122.725
+    },
+    {
+      "description": "SNDBR STAR",
+      "frequency_mhz": 120.5
+    },
+    {
+      "description": "SNDBR STAR (UHF)",
+      "frequency_mhz": 350.225
+    },
+    {
+      "description": "TARPN STAR",
+      "frequency_mhz": 126.05
+    },
+    {
+      "description": "TARPN STAR (7000 FT)",
+      "frequency_mhz": 133.775
+    },
+    {
+      "description": "TARPN STAR (UHF)",
+      "frequency_mhz": 251.1
+    },
+    {
+      "description": "TARPN STAR (UHF 7000 FT)",
+      "frequency_mhz": 371.9
+    },
+    {
+      "description": "TARPN STAR (12000 FT)",
+      "frequency_mhz": 124.6
+    },
+    {
+      "description": "TARPN STAR (UHF 12000 FT)",
+      "frequency_mhz": 317.4
+    },
+    {
+      "description": "PALMZ STAR",
+      "frequency_mhz": 120.5
+    },
+    {
+      "description": "PALMZ STAR (UHF)",
+      "frequency_mhz": 350.225
+    },
+    {
+      "description": "CTAF",
+      "frequency_mhz": 122.725
+    },
+    {
+      "description": "VIICE STAR",
+      "frequency_mhz": 120.5
+    },
+    {
+      "description": "VIICE STAR (UHF)",
+      "frequency_mhz": 350.225
+    },
+    {
+      "description": "FOWEE STAR",
+      "frequency_mhz": 120.5
+    },
+    {
+      "description": "FOWEE STAR (UHF)",
+      "frequency_mhz": 350.225
+    },
+    {
+      "description": "AWOS-3PT at K70 (0.4 SW)",
+      "frequency_mhz": 119.025
+    },
+    {
+      "description": "AWOS-3PT Tel",
+      "frequency_mhz": 305.3673013
+    },
+    {
+      "description": "ATIS at HST (11.5 NW)",
+      "frequency_mhz": 269.9
+    }
+  ]
   },
   {
     "icao": "K1O6",
     "name": "Dunsmuir Muni-Mott Airport",
     "lat": 41.263199,
     "lon": -122.272003,
-    "link": "unavailable",
-    "freq": []
+    "link": "https://skyvector.com/airport/1O6/Dunsmuir-Municipal-Mott-Airport",
+    "freq": [
+      {
+        "description": "CTAF",
+        "frequency_mhz": 122.9
+      },
+      {
+        "description": "ASOS at MHS (3.8 NW)",
+        "frequency_mhz": 120.775
+      },
+      {
+        "description": "AWOS-3 at O86 (25.4 SW)",
+        "frequency_mhz": 134.3
+      },
+      {
+        "description": "ASOS at SIY (31.9 N)",
+        "frequency_mhz": 121.125
+      }
+    ]
   },
   {
     "icao": "K26N",
     "name": "Ocean City Municipal Airport",
     "lat": 39.2635,
     "lon": -74.607498,
-    "link": "unavailable",
-    "freq": []
+    "link": "https://skyvector.com/airport/26N/Ocean-City-Municipal-Airport",
+    "freq": [
+      {
+        "description": "AWOS-AV",
+        "frequency_mhz": 119.775
+      },
+      {
+        "description": "ATLANTIC CITY APPROACH",
+        "frequency_mhz": 124.6
+      },
+      {
+        "description": "ATLANTIC CITY APPROACH (UHF)",
+        "frequency_mhz": 327.125
+      },
+      {
+        "description": "ATLANTIC CITY DEPARTURE",
+        "frequency_mhz": 124.6
+      },
+      {
+        "description": "ATLANTIC CITY DEPARTURE (UHF)",
+        "frequency_mhz": 327.125
+      },
+      {
+        "description": "CLEARANCE DELIVERY",
+        "frequency_mhz": 133.6
+      },
+      {
+        "description": "UNICOM",
+        "frequency_mhz": 122.7
+      },
+      {
+        "description": "CTAF",
+        "frequency_mhz": 122.7
+      },
+      {
+        "description": "AWOS-3 at OBI (9.1 W)",
+        "frequency_mhz": 120.475
+      },
+      {
+        "description": "ATIS at ACY (11.7 N)",
+        "frequency_mhz": 125.725
+      }
+    ]
   },
   {
     "icao": "62CA",
     "name": "Bank of America Data Center Heliport",
     "lat": 34.053668,
     "lon": -118.253183,
-    "link": "unavailable",
-    "freq": []
+    "link": "https://skyvector.com/airport/62CA/Bank-of-America-Data-Center-Heliport",
+     "freq": [
+      {
+        "description": "ATIS at HHR (9.3 SW)",
+        "frequency_mhz": 118.4
+      },
+      {
+        "description": "D-ATIS at BUR (9.9 NW)",
+        "frequency_mhz": 135.125
+      }
+    ]
   },
-  {
-    "icao": "KNGT",
-    "name": "Naval Outlying Landing Field Goliad",
-    "lat": 28.615516,
-    "lon": -97.616302,
-    "link": "unavailable",
-    "freq": []
+    {
+      "icao": "KNGT",
+      "name": "Naval Outlying Landing Field Goliad",
+      "lat": 28.615516,
+      "lon": -97.616302,
+      "link": "unavailable",
+      "freq": [
+      {
+        "description": "ASOS",
+        "frequency_mhz": 353.675
+      },
+      {
+        "description": "CTAF",
+        "frequency_mhz": 132.875
+      },
+      {
+        "description": "AWOS-3 at BEA (17.5 SW)",
+        "frequency_mhz": 118.675
+      },
+      {
+        "description": "AWOS-3PT at 2R9 (18.6 NW)",
+        "frequency_mhz": 118.45
+      }
+    ]
   },
   {
     "icao": "KA28",
@@ -48267,20 +48497,12 @@
         "frequency_mhz": 124.3
       },
       {
-        "description": "CNTR",
-        "frequency_mhz": 124.85
-      },
-      {
         "description": "CTAF",
         "frequency_mhz": 119.0
       },
       {
         "description": "GND",
         "frequency_mhz": 121.9
-      },
-      {
-        "description": "RDO",
-        "frequency_mhz": 122.3
       },
       {
         "description": "TWR",
@@ -48297,11 +48519,11 @@
     "name": "Greeneville Municipal Airport",
     "lat": 36.195648,
     "lon": -82.811482,
-    "link": "unavailable",
+    "link": "https://skyvector.com/airport/GCY/Greeneville-Municipal-Airport",
     "freq": [
       {
         "description": "A/D",
-        "frequency_mhz": 119.25
+        "frequency_mhz": 128.05
       },
       {
         "description": "AWOS",
@@ -48309,7 +48531,7 @@
       },
       {
         "description": "UNIC",
-        "frequency_mhz": 122.7
+        "frequency_mhz": 122.700
       }
     ]
   },
@@ -73657,14 +73879,14 @@
       },
       {
         "description": "ATIS",
-        "frequency_mhz": 113.7
+        "frequency_mhz": 118.85
       },
       {
         "description": "AWOS",
         "frequency_mhz": 118.05
       },
       {
-        "description": "CLD",
+        "description": "CLR",
         "frequency_mhz": 118.2
       },
       {
@@ -73680,15 +73902,11 @@
         "frequency_mhz": 121.8
       },
       {
-        "description": "MISC",
-        "frequency_mhz": 34.5
-      },
-      {
         "description": "TWR",
         "frequency_mhz": 120.5
       },
       {
-        "description": "UNIC",
+        "description": "CTAF",
         "frequency_mhz": 122.95
       }
     ]

@@ -46,16 +46,21 @@ function showPage(pageName) {
   // Show the selected page
   document.getElementById(pageName + '-page').classList.add('active');
   
-  // Update navigation button states
-  document.querySelectorAll('.nav-button').forEach(btn => {
-    btn.classList.remove('active');
-  });
-  event.target.classList.add('active');
+  // Update navigation button states and visibility
+  const mapButton = document.querySelector('.nav-button[onclick="showPage(\'map\')"]');
+  const radioButton = document.querySelector('.nav-button[onclick="showPage(\'radio\')"]');
   
-  // Show/hide map controls based on current page
-  const mapControls = document.getElementById('map-controls');
   if (pageName === 'map') {
+    // On map page: hide map button, show radio button
+    mapButton.style.display = 'none';
+    radioButton.style.display = 'block';
+    radioButton.classList.add('active');
+    mapButton.classList.remove('active');
+    
+    // Show map controls
+    const mapControls = document.getElementById('map-controls');
     mapControls.classList.add('active');
+    
     // Restore route display if airports are selected (even without a drawn route)
     if (selectedFromAirport && selectedToAirport) {
       document.getElementById('route-from-display').textContent = selectedFromAirport;
@@ -70,6 +75,14 @@ function showPage(pageName) {
       updateRouteButton();
     }
   } else {
+    // On radio page: show map button, hide radio button
+    mapButton.style.display = 'block';
+    radioButton.style.display = 'none';
+    mapButton.classList.add('active');
+    radioButton.classList.remove('active');
+    
+    // Hide map controls
+    const mapControls = document.getElementById('map-controls');
     mapControls.classList.remove('active');
   }
 }
@@ -200,8 +213,7 @@ let currentTileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{
 
 // Map tile switching function - allows users to change map styles
 function changeMapTile() {
-  const selector = document.getElementById('map-tile-selector');
-  const selectedTile = selector.value;
+  const selectedTile = document.querySelector('input[name="map-tile"]:checked').value;
   
   // Remove current tile layer
   if (currentTileLayer) {
