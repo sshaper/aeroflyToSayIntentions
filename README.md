@@ -4,7 +4,7 @@ This application allows you to connect Aerofly fs4 to SayIntentions ATC using VR
 
 **VERY IMPORTANT:** Read the [instructions.pdf](instructions.pdf) file to see how to set up and install this application.
 
-**Major Interface Change on 8/7/2025** Functionality is mostly the same.  The radio page was removed and the coms were moved to the map page.  There is no longer a hover over the airport icon.  However when you click on a airport you get a dialog box were you can select what frequency is com1 or com2 by clicking the button and that will automatically be added to the standby side of the com.  Much easier to use in VR.  The videos still show how most of it works just no more radio page. 
+**Major Interface Change on 8/7/2025**  Functionality is mostly the same.  The radio page was removed and the coms were moved to the map page.  There is no longer a hover over the airport icon.  However when you click on a airport you get a dialog box were you can select the frequency for com 1 or com 2 by clicking the button and that frequency will automatically be added to the standby side of the com.  Much easier to use in VR.  The videos still show how most of it works just no more radio page and different on how you add frequencies. 
 
 ![Latest Interface](screenshots/newInterface.png)
 
