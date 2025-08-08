@@ -1,172 +1,125 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Aerofly Moving Map & Radio</title>
+  <title>Aerofly Moving Map</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-  <!-- Navigation Buttons -->
-  <div class="nav-buttons">
-    <button class="nav-button" onclick="showPage('map')" style="display: none;">Map</button>
-    <button class="nav-button active" onclick="showPage('radio')">Radio</button>
-  </div>
-  
-     <!-- Map Controls -->
-   <div class="map-controls active" id="map-controls">
-     <div class="top-row-controls">
-       <div class="map-selector">
-         <div class="radio-group">
-           <label class="radio-option">
-             <input type="radio" name="map-tile" value="OpenStreetMap" checked onchange="changeMapTile()">
-             <span class="radio-label">Map</span>
-           </label>
-           <label class="radio-option">
-             <input type="radio" name="map-tile" value="OpenTopoMap" onchange="changeMapTile()">
-             <span class="radio-label">Topo</span>
-           </label>
-           <label class="radio-option">
-             <input type="radio" name="map-tile" value="Esri.WorldImagery" onchange="changeMapTile()">
-             <span class="radio-label">Sat</span>
-           </label>
-         </div>
-       </div>
-       
-       <div class="airport-toggle">
-         <input type="checkbox" id="airport-toggle" checked onchange="toggleAirports()">
-         <label for="airport-toggle">Airports</label>
-       </div>
-       
-       <div class="aircraft-follow-toggle">
-         <input type="checkbox" id="aircraft-follow-toggle" checked onchange="toggleAircraftFollow()">
-         <label for="aircraft-follow-toggle">Follow Aircraft</label>
-       </div>
-     </div>
-     
-     <div class="route-planner">
-       <div class="top-row">
-         <div class="route-display">
-           <span>FROM:</span>
-           <div class="route-field" id="route-from-display">Click airport</div>
-           <span>→</span>
-           <span>TO:</span>
-           <div class="route-field" id="route-to-display">Click airport</div>
-         </div>
-         <button onclick="drawRoute()" id="route-button" disabled>Route</button>
-         <button class="clear" onclick="clearRoute()">Clear</button>
-       </div>
-       <div class="route-info" id="route-info" style="display: none;">
-         <div class="route-info-row">
-           <span><b>Bearing:</b></span>
-           <span id="route-bearing">--</span>
-         </div>
-         <div class="route-info-row">
-           <span><b>Distance:</b></span>
-           <span id="route-distance">--</span>
-         </div>
-       </div>
-     </div>
-   </div>
-
-  <!-- Map Page -->
-  <div id="map-page" class="page active">
-    <div id="map"></div>
-  </div>
-
-     <!-- Radio Page -->
-   <div id="radio-page" class="page">
-     <div class="radio-container">
-       <!-- Route Information Display -->
-       <div class="route-info-display" id="route-info-display" style="display: none;">
-         <div class="route-airport-info">
-           <h3>FROM</h3>
-           <div class="icao" id="radio-from-icao">--</div>
-           <div class="name" id="radio-from-name">--</div>
-           <div class="frequencies" id="radio-from-freq">--</div>
-         </div>
-         <div class="route-airport-info">
-           <h3>TO</h3>
-           <div class="icao" id="radio-to-icao">--</div>
-           <div class="name" id="radio-to-name">--</div>
-           <div class="frequencies" id="radio-to-freq">--</div>
-         </div>
-       </div>
-       
-       <!-- COM1 Section -->
-        <div class="radio-section">
-         <div class="radio-title">COM1</div>
-         <div class="frequency-display-row">
-           <div class="frequency-display-active" id="com1-active">118.000</div>
-           <button class="swap-button" onclick="swapFrequencies('com1')">SWAP</button>
-           <div class="frequency-display-standby" id="com1-standby">118.500</div>
-         </div>
-        <div class="frequency-input">
-          <input type="text" class="freq-digit" id="com1-digit1" maxlength="1" value="1" readonly>
-          <input type="text" class="freq-digit" id="com1-digit2" maxlength="1" value="1" readonly>
-          <input type="text" class="freq-digit" id="com1-digit3" maxlength="1" value="8" readonly>
-          <span style="font-size: 24px; font-weight: bold; line-height: 50px;">.</span>
-          <input type="text" class="freq-digit" id="com1-digit4" maxlength="1" value="0" readonly>
-          <input type="text" class="freq-digit" id="com1-digit5" maxlength="1" value="0" readonly>
-          <input type="text" class="freq-digit" id="com1-digit6" maxlength="1" value="0" readonly>
-        </div>
-        <div class="keypad">
-          <button class="keypad-button" onclick="pressKey('com1', '1')">1</button>
-          <button class="keypad-button" onclick="pressKey('com1', '2')">2</button>
-          <button class="keypad-button" onclick="pressKey('com1', '3')">3</button>
-          <button class="keypad-button" onclick="pressKey('com1', '4')">4</button>
-          <button class="keypad-button" onclick="pressKey('com1', '5')">5</button>
-          <button class="keypad-button" onclick="pressKey('com1', '6')">6</button>
-          <button class="keypad-button" onclick="pressKey('com1', '7')">7</button>
-          <button class="keypad-button" onclick="pressKey('com1', '8')">8</button>
-          <button class="keypad-button" onclick="pressKey('com1', '9')">9</button>
-          <button class="keypad-button clear" onclick="clearFreq('com1')">C</button>
-          <button class="keypad-button" onclick="pressKey('com1', '0')">0</button>
-          <button class="keypad-button enter" onclick="enterFreq('com1')">ENT</button>
-        </div>
-        <button class="power-button" id="com1-power" onclick="togglePower('com1')">POWER OFF</button>
+  <!-- Top Row Controls -->
+  <div class="top-row-controls">
+    <!-- Map Type Selector -->
+    <div class="control-box map-selector-box">
+      <div class="radio-group">
+        <label class="radio-option">
+          <input type="radio" name="map-tile" value="OpenStreetMap" checked onchange="changeMapTile()">
+          <span class="radio-label">Map</span>
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="map-tile" value="OpenTopoMap" onchange="changeMapTile()">
+          <span class="radio-label">Topo</span>
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="map-tile" value="Esri.WorldImagery" onchange="changeMapTile()">
+          <span class="radio-label">Sat</span>
+        </label>
       </div>
-
-             <!-- COM2 Section -->
-       <div class="radio-section">
-         <div class="radio-title">COM2</div>
-         <div class="frequency-display-row">
-           <div class="frequency-display-active" id="com2-active">118.500</div>
-           <button class="swap-button" onclick="swapFrequencies('com2')">SWAP</button>
-           <div class="frequency-display-standby" id="com2-standby">118.000</div>
-         </div>
-        <div class="frequency-input">
-          <input type="text" class="freq-digit" id="com2-digit1" maxlength="1" value="1" readonly>
-          <input type="text" class="freq-digit" id="com2-digit2" maxlength="1" value="1" readonly>
-          <input type="text" class="freq-digit" id="com2-digit3" maxlength="1" value="8" readonly>
-          <span style="font-size: 24px; font-weight: bold; line-height: 50px;">.</span>
-          <input type="text" class="freq-digit" id="com2-digit4" maxlength="1" value="5" readonly>
-          <input type="text" class="freq-digit" id="com2-digit5" maxlength="1" value="0" readonly>
-          <input type="text" class="freq-digit" id="com2-digit6" maxlength="1" value="0" readonly>
-        </div>
-        <div class="keypad">
-          <button class="keypad-button" onclick="pressKey('com2', '1')">1</button>
-          <button class="keypad-button" onclick="pressKey('com2', '2')">2</button>
-          <button class="keypad-button" onclick="pressKey('com2', '3')">3</button>
-          <button class="keypad-button" onclick="pressKey('com2', '4')">4</button>
-          <button class="keypad-button" onclick="pressKey('com2', '5')">5</button>
-          <button class="keypad-button" onclick="pressKey('com2', '6')">6</button>
-          <button class="keypad-button" onclick="pressKey('com2', '7')">7</button>
-          <button class="keypad-button" onclick="pressKey('com2', '8')">8</button>
-          <button class="keypad-button" onclick="pressKey('com2', '9')">9</button>
-          <button class="keypad-button clear" onclick="clearFreq('com2')">C</button>
-          <button class="keypad-button" onclick="pressKey('com2', '0')">0</button>
-          <button class="keypad-button enter" onclick="enterFreq('com2')">ENT</button>
-        </div>
-        <button class="power-button" id="com2-power" onclick="togglePower('com2')">POWER OFF</button>
+    </div>
+    
+    <!-- Airports Toggle -->
+    <div class="control-box">
+      <div class="airport-toggle">
+        <input type="checkbox" id="airport-toggle" checked onchange="toggleAirports()">
+        <label for="airport-toggle">Airports</label>
+      </div>
+    </div>
+    
+    <!-- Follow Aircraft Toggle -->
+    <div class="control-box">
+      <div class="aircraft-follow-toggle">
+        <input type="checkbox" id="aircraft-follow-toggle" checked onchange="toggleAircraftFollow()">
+        <label for="aircraft-follow-toggle">Follow Aircraft</label>
       </div>
     </div>
   </div>
+
+  <!-- Second Row Controls -->
+  <div class="second-row-controls">
+    <!-- Route Planner Box -->
+    <div class="control-box route-planner-box">
+      <div class="route-top-row">
+        <div class="route-display">
+          <span>FROM:</span>
+          <div class="route-field" id="route-from-display">Click airport</div>
+          <span>→</span>
+          <span>TO:</span>
+          <div class="route-field" id="route-to-display">Click airport</div>
+        </div>
+        <div class="route-buttons">
+          <button onclick="drawRoute()" id="route-button" disabled>Route</button>
+          <button class="clear" onclick="clearRoute()">Clear</button>
+        </div>
+      </div>
+      <!-- Route Info Display -->
+      <div class="route-info" id="route-info" style="display: none;">
+        <div class="route-info-row">
+          <span>Bearing:</span>
+          <span id="route-bearing">0.0°</span>
+        </div>
+        <div class="route-info-row">
+          <span>Distance:</span>
+          <span id="route-distance">0.0 nm</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- COM Radios Box -->
+    <div class="control-box com-radios-box">
+      <div class="com1-control">
+        <div class="com-header">
+          <input type="checkbox" id="com1-toggle" onchange="toggleCom('com1')">
+          <label for="com1-toggle">com 1</label>
+        </div>
+        <div class="frequency-display-row">
+          <div class="frequency-display-active" id="com1-active">118.000</div>
+          <button class="swap-button" onclick="swapFrequencies('com1')">SWAP</button>
+          <div class="frequency-display-standby" id="com1-standby">118.500</div>
+        </div>
+      </div>
+      
+      <div class="com2-control">
+        <div class="com-header">
+          <input type="checkbox" id="com2-toggle" onchange="toggleCom('com2')">
+          <label for="com2-toggle">com 2</label>
+        </div>
+        <div class="frequency-display-row">
+          <div class="frequency-display-active" id="com2-active">118.000</div>
+          <button class="swap-button" onclick="swapFrequencies('com2')">SWAP</button>
+          <div class="frequency-display-standby" id="com2-standby">118.500</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Airport Frequency Panel -->
+  <div class="airport-frequency-panel" id="airport-frequency-panel" style="display: none;">
+    <div class="panel-header">
+      <h3 id="airport-panel-title">Airport Frequencies</h3>
+      <button class="close-panel" onclick="closeAirportPanel()">×</button>
+    </div>
+    <div class="frequency-list" id="frequency-list">
+      <!-- Frequencies will be populated here -->
+    </div>
+  </div>
+
+  <!-- Map Container -->
+  <div id="map"></div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet-providers@latest/leaflet-providers.js"></script>
   <script src="https://rawcdn.githack.com/bbecquet/Leaflet.RotatedMarker/master/leaflet.rotatedMarker.js"></script>
   <script src="js/main.js"></script>
-  </body>
+</body>
 </html>

@@ -1,574 +1,432 @@
 html, body { 
-      height: 100%; 
-      margin: 0; 
-      font-family: Arial, sans-serif;
-    }
-    
-    #map { 
-      width: 100%; 
-      height: 100%; 
-    }
-    
-    .aircraft-icon {
-      font-size: 15px;
-      text-align: center;
-      line-height: 15px;
-    }
-    
-    .airport-icon {
-      font-size: 20px;
-      text-align: center;
-      line-height: 20px;
-    }
-    
-    /* Navigation Buttons */
-    .nav-buttons {
-      position: fixed;
-      top: 20px;
-      left: 100px;
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      align-items: center;
-    }
-    
-    /* Map Controls */
-    .map-controls {
-      position: fixed;
-      top: 20px;
-      left: 220px;
-      z-index: 1000;
-      display: none;
-      gap: 15px;
-      align-items: flex-start;
-    }
-    
-    .map-controls.active {
-      display: flex;
-    }
-    
-     /* Radio button styles for map selector */
-     .map-selector .radio-group {
-       display: flex;
-       gap: 15px;
-       align-items: center;
-     }
-     
-     .map-selector .radio-option {
-       display: flex;
-       align-items: center;
-       gap: 8px;
-       background-color: white;
-       padding: 12px 0px;
-       border-radius: 8px;
-       border: 2px solid #007bff;
-       cursor: pointer;
-       transition: all 0.3s;
-       min-width: 120px;
-       justify-content: center;
-     }
-     
-     .map-selector .radio-option:hover {
-       border-color: #0056b3;
-       background-color: #f8f9fa;
-     }
-     
-     .map-selector .radio-option input[type="radio"] {
-       width: 20px;
-       height: 20px;
-       cursor: pointer;
-       margin: 0;
-     }
-     
-     .map-selector .radio-option input[type="radio"]:checked + .radio-label {
-       font-weight: bold;
-       color: #007bff;
-     }
-     
-     .map-selector .radio-option:has(input[type="radio"]:checked) {
-       border-color: #28a745;
-       background-color: #d4edda;
-     }
-     
-     .map-selector .radio-label {
-       font-size: 14px;
-       font-weight: normal;
-       color: #333;
-       cursor: pointer;
-       white-space: nowrap;
-     }
-     
-     .airport-toggle {
-       display: flex;
-       align-items: center;
-       gap: 8px;
-       background-color: white;
-       padding: 10px 15px;
-       border-radius: 8px;
-       border: 2px solid #007bff;
-     }
-     
-     .airport-toggle input[type="checkbox"] {
-       width: 18px;
-       height: 18px;
-       cursor: pointer;
-     }
-     
-           .airport-toggle label {
-        font-weight: bold;
-        color: #333;
-        cursor: pointer;
-      }
-      
-      .aircraft-follow-toggle {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        background-color: white;
-        padding: 10px 15px;
-        border-radius: 8px;
-        border: 2px solid #007bff;
-      }
-      
-      .aircraft-follow-toggle input[type="checkbox"] {
-        width: 18px;
-        height: 18px;
-        cursor: pointer;
-      }
-      
-      .aircraft-follow-toggle label {
-        font-weight: bold;
-        color: #333;
-        cursor: pointer;
-      }
-     
-      .route-planner {
-         display: flex;
-         flex-direction: column;
-         background-color: white;
-         padding: 10px 15px;
-         border-radius: 8px;
-         border: 2px solid #007bff;
-         min-height: 80px;
-       }
-       
-       .route-planner .top-row {
-         display: flex;
-         align-items: center;
-         gap: 10px;
-       }
-      
-      .route-planner .route-display {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-weight: bold;
-        color: #333;
-      }
-      
-      .route-planner .route-field {
-        padding: 8px 12px;
-        font-size: 14px;
-        font-weight: bold;
-        background-color: #f8f9fa;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        min-width: 80px;
-        text-align: center;
-        color: #666;
-      }
-      
-      .route-planner .route-field.filled {
-        background-color: #e7f3ff;
-        border-color: #007bff;
-        color: #007bff;
-      }
-      
-      .route-planner button {
-        padding: 8px 15px;
-        font-size: 14px;
-        font-weight: bold;
-        background-color: #28a745;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-      }
-      
-      .route-planner button:hover {
-        background-color: #1e7e34;
-      }
-      
-      .route-planner button.clear {
-        background-color: #dc3545;
-      }
-      
-      .route-planner button.clear:hover {
-        background-color: #c82333;
-      }
-      
-      .route-planner button:disabled {
-        background-color: #6c757d;
-        cursor: not-allowed;
-      }
-      
-             .route-planner button:disabled:hover {
-         background-color: #6c757d;
-       }
-       
-               .route-info {
-          margin-top: auto;
-          padding: 10px;
-          background-color: #f8f9fa;
-          border-radius: 6px;
-          border: 1px solid #dee2e6;
-        }
-       
-       .route-info-row {
-         display: flex;
-         justify-content: space-between;
-         align-items: center;
-         margin-bottom: 5px;
-         font-size: 14px;
-       }
-       
-       .route-info-row:last-child {
-         margin-bottom: 0;
-       }
-       
-       .route-info-row span:first-child {
-         color: #495057;
-       }
-       
-       .route-info-row span:last-child {
-         font-weight: bold;
-         color: #007bff;
-       }
-    
-                               .top-row-controls{
-         display: flex;
-         flex-direction: row;
-         gap: 10px;
-         align-items: center;
-        }
-        
-        /* Simple responsive: just move route planner under other controls */
-        @media (max-width: 1400px) {
-          .map-controls {
-            flex-direction: column;
-            gap: 10px;
-          }
-          
-          .route-planner {
-            margin-top: 10px;
-          }
-        }
+  height: 100%; 
+  margin: 0; 
+  font-family: Arial, sans-serif;
+}
 
-    .nav-button {
-      padding: 15px 25px;
-      font-size: 18px;
-      font-weight: bold;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      min-width: 100px;
-      transition: background-color 0.3s;
-    }
-    
-    .nav-button:hover {
-      background-color: #0056b3;
-    }
-    
-    .nav-button.active {
-      background-color: #28a745;
-    }
-    
-    /* Page Containers */
-    .page {
-      display: none;
-      width: 100%;
-      height: 100%;
-    }
-    
-    .page.active {
-      display: block;
-    }
-    
-         /* Radio Page Styles */
-     .radio-container {
-       padding: 20px;
-       padding-top: 80px;
-       background-color: #f8f9fa;
-       height: 100%;
-       box-sizing: border-box;
-     }
-     
-     .route-info-display {
-       display: flex;
-       justify-content: space-between;
-       margin-bottom: 20px;
-       gap: 20px;
-     }
-     
-           .route-airport-info {
-        flex: 1;
-        background: white;
-        border-radius: 8px;
-        padding: 15px;
-        border: 2px solid #007bff;
-        text-align: left;
-        min-height: 200px;
-        display: flex;
-        flex-direction: column;
-      }
-      
-      .route-airport-info h3 {
-        margin: 0 0 10px 0;
-        font-size: 16px;
-        font-weight: bold;
-        color: #333;
-        text-align: center;
-      }
-      
-      .route-airport-info .icao {
-        font-size: 20px;
-        font-weight: bold;
-        color: #007bff;
-        margin-bottom: 5px;
-        text-align: center;
-      }
-      
-             .route-airport-info .name {
-         font-size: 16px;
-         color: #666;
-         margin-bottom: 10px;
-         line-height: 1.2;
-         text-align: center;
-       }
-       
-       .route-airport-info .frequencies {
-         font-size: 16px;
-         color: #495057;
-         line-height: 1.3;
-         flex: 1;
-         display: flex;
-         flex-direction: column;
-       }
-      
-      .route-airport-info .frequencies.multi-column {
-        flex-direction: row;
-        gap: 15px;
-      }
-      
-      .route-airport-info .freq-column {
-        flex: 1;
-      }
-      
-      .route-airport-info .no-freq {
-        font-style: italic;
-        color: #6c757d;
-        text-align: center;
-      }
-    
-    .radio-section {
-      background: white;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    
-    .radio-title {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 15px;
-      color: #333;
-    }
-    
-    .frequency-display {
-      font-size: 32px;
-      font-weight: bold;
-      text-align: center;
-      padding: 15px;
-      background-color: #e9ecef;
-      border-radius: 8px;
-      margin-bottom: 15px;
-      font-family: 'Courier New', monospace;
-    }
-    
-         .frequency-display-row {
-       display: flex;
-       justify-content: center;
-       align-items: center;
-       gap: 15px;
-       margin-bottom: 15px;
-     }
-     
-     .frequency-display-active {
-       font-size: 24px;
-       font-weight: bold;
-       padding: 15px 25px;
-       background-color: #28a745;
-       color: white;
-       border-radius: 8px;
-       min-width: 120px;
-       text-align: center;
-       font-family: 'Courier New', monospace;
-     }
-     
-     .frequency-display-standby {
-       font-size: 24px;
-       font-weight: bold;
-       padding: 15px 25px;
-       background-color: #fd7e14;
-       color: white;
-       border-radius: 8px;
-       min-width: 120px;
-       text-align: center;
-       font-family: 'Courier New', monospace;
-     }
-     
-     .swap-button {
-       padding: 15px 25px;
-       font-size: 18px;
-       font-weight: bold;
-       background-color: #17a2b8;
-       color: white;
-       border: none;
-       border-radius: 8px;
-       cursor: pointer;
-       transition: background-color 0.3s;
-       min-width: 80px;
-     }
-     
-     .swap-button:hover {
-       background-color: #138496;
-     }
-    
-    .power-button {
-      padding: 15px 30px;
-      font-size: 18px;
-      font-weight: bold;
-      background-color: #dc3545;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      min-width: 120px;
-      transition: background-color 0.3s;
-    }
-    
-    .power-button.on {
-      background-color: #28a745;
-    }
-    
-    .power-button:hover {
-      opacity: 0.8;
-    }
-    
-    .digit-buttons {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 15px;
-    }
-    
-    .digit-button {
-      padding: 15px;
-      font-size: 20px;
-      font-weight: bold;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    
-    .digit-button:hover {
-      background-color: #0056b3;
-    }
-    
-    .swap-button {
-      padding: 12px 20px;
-      font-size: 16px;
-      font-weight: bold;
-      background-color: #17a2b8;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    
-    .swap-button:hover {
-      background-color: #138496;
-    }
-    
-    .frequency-input {
-      display: flex;
-      justify-content: center;
-      gap: 5px;
-      margin-bottom: 15px;
-    }
-    
-    .freq-digit {
-      width: 40px;
-      height: 50px;
-      font-size: 24px;
-      font-weight: bold;
-      text-align: center;
-      border: 2px solid #007bff;
-      border-radius: 6px;
-      background-color: #f8f9fa;
-      color: #333;
-    }
-    
-    .freq-digit:focus {
-      outline: none;
-      border-color: #28a745;
-      background-color: white;
-    }
-    
-    .keypad {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 15px;
-    }
-    
-    .keypad-button {
-      padding: 15px;
-      font-size: 20px;
-      font-weight: bold;
-      background-color: #6c757d;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    
-    .keypad-button:hover {
-      background-color: #545b62;
-    }
-    
-    .keypad-button.enter {
-      background-color: #28a745;
-    }
-    
-    .keypad-button.enter:hover {
-      background-color: #1e7e34;
-    }
-    
-    .keypad-button.clear {
-      background-color: #dc3545;
-    }
-    
-    .keypad-button.clear:hover {
-      background-color: #c82333;
-    }
+#map { 
+  width: 100%; 
+  height: 100%; 
+}
+
+.aircraft-icon {
+  font-size: 15px;
+  text-align: center;
+  line-height: 15px;
+}
+
+.airport-icon {
+  font-size: 20px;
+  text-align: center;
+  line-height: 20px;
+}
+
+/* Control Box Base Styles */
+.control-box {
+  background-color: white;
+  border: 1px solid #007bff;
+  border-radius: 8px;
+  padding: 8px 12px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+/* Top Row Controls */
+.top-row-controls {
+  position: fixed;
+  top: 20px;
+  left: 60px; /* Space for zoom controls */
+  display: flex;
+  gap: 10px;
+  z-index: 1000;
+}
+
+/* Map Selector Box */
+.map-selector-box {
+  background-color: #d4edda;
+  border-color: #28a745;
+}
+
+.map-selector-box .radio-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.map-selector-box .radio-option {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid #007bff;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-width: 50px;
+  justify-content: center;
+}
+
+.map-selector-box .radio-option:hover {
+  border-color: #0056b3;
+  background-color: #f8f9fa;
+}
+
+.map-selector-box .radio-option input[type="radio"] {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+  margin: 0;
+}
+
+.map-selector-box .radio-option input[type="radio"]:checked + .radio-label {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.map-selector-box .radio-option:has(input[type="radio"]:checked) {
+  border-color: #28a745;
+  background-color: #d4edda;
+}
+
+.map-selector-box .radio-label {
+  font-size: 12px;
+  font-weight: normal;
+  color: #333;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Airports and Follow Aircraft Toggle Boxes */
+.airport-toggle, .aircraft-follow-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.airport-toggle input[type="checkbox"], .aircraft-follow-toggle input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+.airport-toggle label, .aircraft-follow-toggle label {
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+/* Second Row Controls */
+.second-row-controls {
+  position: fixed;
+  top: 80px;
+  left: 60px; /* Space for zoom controls */
+  display: flex;
+  gap: 15px;
+  z-index: 1000;
+}
+
+/* Route Planner Box */
+.route-planner-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 350px;
+}
+
+.route-top-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.route-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+  color: #333;
+  background-color: #f8f9fa;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px 12px;
+  flex: 1;
+}
+
+.route-field {
+  font-size: 14px;
+  font-weight: bold;
+  background: none;
+  border: none;
+  min-width: 100px;
+  text-align: center;
+  color: #666;
+}
+
+.route-field.filled {
+  background-color: #e7f3ff;
+  border-color: #007bff;
+  color: #007bff;
+}
+
+.route-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.route-buttons button {
+  padding: 8px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.route-buttons button:hover {
+  background-color: #545b62;
+}
+
+.route-buttons button.clear {
+  background-color: #dc3545;
+}
+
+.route-buttons button.clear:hover {
+  background-color: #c82333;
+}
+
+.route-buttons button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.route-buttons button:disabled:hover {
+  background-color: #6c757d;
+}
+
+/* Route Info Display */
+.route-info {
+  margin-top: 8px;
+  padding: 8px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+}
+
+.route-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+  font-size: 12px;
+}
+
+.route-info-row:last-child {
+  margin-bottom: 0;
+}
+
+.route-info-row span:first-child {
+  color: #495057;
+  font-weight: bold;
+}
+
+.route-info-row span:last-child {
+  font-weight: bold;
+  color: #007bff;
+  font-family: 'Courier New', monospace;
+}
+
+/* COM Radios Box */
+.com-radios-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 280px;
+}
+
+.com1-control, .com2-control {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.com-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 60px;
+}
+
+.com-header input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+.com-header label {
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.frequency-display-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+.frequency-display-active {
+  font-size: 14px;
+  font-weight: bold;
+  padding: 6px 10px;
+  background-color: #28a745;
+  color: white;
+  border-radius: 4px;
+  min-width: 70px;
+  text-align: center;
+  font-family: 'Courier New', monospace;
+}
+
+.frequency-display-standby {
+  font-size: 14px;
+  font-weight: bold;
+  padding: 6px 10px;
+  background-color: #fd7e14;
+  color: white;
+  border-radius: 4px;
+  min-width: 70px;
+  text-align: center;
+  font-family: 'Courier New', monospace;
+}
+
+.swap-button {
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: bold;
+  background-color: #17a2b8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  min-width: 50px;
+}
+
+.swap-button:hover {
+  background-color: #138496;
+}
+
+/* Airport Frequency Panel */
+.airport-frequency-panel {
+  position: fixed;
+  top: 166px;
+  right: 20px;
+  width: 350px;
+  max-height: 400px;
+  background-color: white;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1001;
+  overflow: hidden;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: #007bff;
+  color: white;
+}
+
+.panel-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.close-panel {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.close-panel:hover {
+  background-color: rgba(255,255,255,0.2);
+}
+
+.frequency-list {
+  padding: 15px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.frequency-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.frequency-item:last-child {
+  border-bottom: none;
+}
+
+.frequency-info {
+  flex: 1;
+}
+
+.frequency-description {
+  font-weight: bold;
+  color: #333;
+  font-size: 14px;
+}
+
+.frequency-value {
+  color: #666;
+  font-size: 12px;
+  font-family: 'Courier New', monospace;
+}
+
+.frequency-links {
+  display: flex;
+  gap: 8px;
+}
+
+.frequency-link {
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: bold;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  text-decoration: none;
+}
+
+.frequency-link:hover {
+  background-color: #0056b3;
+}
+

@@ -24,156 +24,108 @@ const radioState = {
   }
 };
 
-// Frequency input state - manages the digit-by-digit frequency entry system
-const freqInput = {
-  com1: {
-    currentPos: 0,                    // Current cursor position (0-5)
-    digits: ['1', '1', '8', '0', '0', '0']  // Individual frequency digits
-  },
-  com2: {
-    currentPos: 0,
-    digits: ['1', '1', '8', '5', '0', '0']
-  }
-};
 
-// Page navigation system - handles switching between different interface pages
-function showPage(pageName) {
-  // Hide all pages first
-  document.querySelectorAll('.page').forEach(page => {
-    page.classList.remove('active');
-  });
+
+// COM toggle function - handle COM1/COM2 power state
+function toggleCom(com) {
+  const checkbox = document.getElementById(com + '-toggle');
+  radioState[com].power = checkbox.checked;
   
-  // Show the selected page
-  document.getElementById(pageName + '-page').classList.add('active');
+  // Update display based on power state
+  const activeDisplay = document.getElementById(com + '-active');
+  const standbyDisplay = document.getElementById(com + '-standby');
+  const swapButton = activeDisplay.parentElement.querySelector('.swap-button');
   
-  // Update navigation button states and visibility
-  const mapButton = document.querySelector('.nav-button[onclick="showPage(\'map\')"]');
-  const radioButton = document.querySelector('.nav-button[onclick="showPage(\'radio\')"]');
-  
-  if (pageName === 'map') {
-    // On map page: hide map button, show radio button
-    mapButton.style.display = 'none';
-    radioButton.style.display = 'block';
-    radioButton.classList.add('active');
-    mapButton.classList.remove('active');
-    
-    // Show map controls
-    const mapControls = document.getElementById('map-controls');
-    mapControls.classList.add('active');
-    
-    // Restore route display if airports are selected (even without a drawn route)
-    if (selectedFromAirport && selectedToAirport) {
-      document.getElementById('route-from-display').textContent = selectedFromAirport;
-      document.getElementById('route-from-display').classList.add('filled');
-      document.getElementById('route-to-display').textContent = selectedToAirport;
-      document.getElementById('route-to-display').classList.add('filled');
-      
-      // Show route info if route is actually drawn
-      if (routeLine) {
-        document.getElementById('route-info').style.display = 'block';
-      }
-      updateRouteButton();
-    }
+  if (radioState[com].power) {
+    // COM is ON
+    activeDisplay.style.opacity = '1';
+    standbyDisplay.style.opacity = '1';
+    swapButton.disabled = false;
   } else {
-    // On radio page: show map button, hide radio button
-    mapButton.style.display = 'block';
-    radioButton.style.display = 'none';
-    mapButton.classList.add('active');
-    radioButton.classList.remove('active');
-    
-    // Hide map controls
-    const mapControls = document.getElementById('map-controls');
-    mapControls.classList.remove('active');
+    // COM is OFF
+    activeDisplay.style.opacity = '0.5';
+    standbyDisplay.style.opacity = '0.5';
+    swapButton.disabled = true;
   }
+  
+  updateSimAPI();
+}
+
+// Airport frequency panel functions
+function showAirportFrequencies(airport) {
+  const panel = document.getElementById('airport-frequency-panel');
+  const title = document.getElementById('airport-panel-title');
+  const frequencyList = document.getElementById('frequency-list');
+  
+  // Set panel title
+  title.textContent = `${airport.icao} - ${airport.name}`;
+  
+  // Clear existing frequencies
+  frequencyList.innerHTML = '';
+  
+  // Add frequencies to panel
+  if (airport.freq && airport.freq.length > 0) {
+    airport.freq.forEach(freq => {
+      const frequencyItem = document.createElement('div');
+      frequencyItem.className = 'frequency-item';
+      
+      frequencyItem.innerHTML = `
+        <div class="frequency-info">
+          <div class="frequency-description">${freq.description}</div>
+          <div class="frequency-value">${freq.frequency_mhz} MHz</div>
+        </div>
+        <div class="frequency-links">
+          <button class="frequency-link" onclick="setFrequency('com1', '${freq.frequency_mhz}')">COM1</button>
+          <button class="frequency-link" onclick="setFrequency('com2', '${freq.frequency_mhz}')">COM2</button>
+        </div>
+      `;
+      
+      frequencyList.appendChild(frequencyItem);
+    });
+  } else {
+    // No frequencies available
+    const noFreqItem = document.createElement('div');
+    noFreqItem.className = 'frequency-item';
+    noFreqItem.innerHTML = '<div class="frequency-info"><div class="frequency-description">No frequencies available</div></div>';
+    frequencyList.appendChild(noFreqItem);
+  }
+  
+  // Add route action buttons
+  addRouteActionsToPanel(airport);
+  
+  // Show the panel
+  panel.style.display = 'block';
+}
+
+function closeAirportPanel() {
+  const panel = document.getElementById('airport-frequency-panel');
+  panel.style.display = 'none';
+}
+
+function setFrequency(com, frequency) {
+  // Set as standby frequency regardless of power state
+  radioState[com].standby = frequency;
+  updateDisplay(com);
+  updateSimAPI();
 }
 
 // Radio functions - handle frequency management and radio operations
 
 // Swap active and standby frequencies for a given radio
 function swapFrequencies(com) {
+  // Only swap if COM is powered on
+  if (!radioState[com].power) {
+    return;
+  }
+  
   const temp = radioState[com].active;
   radioState[com].active = radioState[com].standby;
   radioState[com].standby = temp;
   updateDisplay(com);
   updateSimAPI();
-  
 }
 
-// Handle digit key presses for frequency entry
-function pressKey(com, key) {
-  const input = freqInput[com];
-  if (input.currentPos < 6) {
-    input.digits[input.currentPos] = key;
-    input.currentPos++;
-    updateFreqInput(com);
-  }
-}
 
-// Clear frequency input and reset to zeros
-function clearFreq(com) {
-  const input = freqInput[com];
-  input.currentPos = 0;
-  input.digits = ['0', '0', '0', '0', '0', '0'];
-  updateFreqInput(com);
-}
-
-// Enter the current frequency input as the standby frequency
-function enterFreq(com) {
-  const input = freqInput[com];
-  const freq = input.digits.join('');
-  const formattedFreq = freq.substring(0, 3) + '.' + freq.substring(3, 6);
-  
-  // Validate frequency range (118.000 to 137.000 for COM frequencies)
-  const freqNum = parseFloat(formattedFreq);
-  if (freqNum >= 118.0 && freqNum <= 137.0) {
-    radioState[com].standby = formattedFreq;
-    updateDisplay(com);
-    updateSimAPI();
-    
-    // Reset input to current standby frequency
-    input.currentPos = 0;
-    input.digits = formattedFreq.replace('.', '').split('');
-    updateFreqInput(com);
-  } else {
-    // Invalid frequency - reset to current standby
-    const currentFreq = radioState[com].standby.replace('.', '');
-    input.digits = currentFreq.split('');
-    input.currentPos = 0;
-    updateFreqInput(com);
-  }
-}
-
-// Update the frequency input display with current digits and cursor position
-function updateFreqInput(com) {
-  const input = freqInput[com];
-  for (let i = 0; i < 6; i++) {
-    const digitElement = document.getElementById(com + '-digit' + (i + 1));
-    digitElement.value = input.digits[i] || '0';
-    
-    // Highlight current cursor position
-    if (i === input.currentPos) {
-      digitElement.style.backgroundColor = '#fff3cd';
-      digitElement.style.borderColor = '#ffc107';
-    } else {
-      digitElement.style.backgroundColor = '#f8f9fa';
-      digitElement.style.borderColor = '#007bff';
-    }
-  }
-}
-
-// Toggle radio power on/off
-function togglePower(com) {
-  radioState[com].power = !radioState[com].power;
-  const button = document.getElementById(com + '-power');
-  if (radioState[com].power) {
-    button.textContent = 'POWER ON';
-    button.classList.add('on');
-  } else {
-    button.textContent = 'POWER OFF';
-    button.classList.remove('on');
-  }
-  updateSimAPI();
-}
 
 // Update the radio display with current active and standby frequencies
 function updateDisplay(com) {
@@ -195,11 +147,9 @@ function updateSimAPI() {
   }
 }
 
-// Initialize radio displays and inputs on page load
+// Initialize radio displays
 updateDisplay('com1');
 updateDisplay('com2');
-updateFreqInput('com1');
-updateFreqInput('com2');
 
 // Map functionality - Leaflet.js map setup and management
 
@@ -282,48 +232,9 @@ fetch('data/all_airports.json?cacheBust=' + Date.now())
     // Create airport marker and add to map
     const marker = L.marker([airport.lat, airport.lon], { icon: airportIcon })
       .addTo(map)
-      .bindPopup(() => {
-        // Format frequency list for popup display
-        const freqList = airport.freq && airport.freq.length
-          ? airport.freq.map(f => `<b>${f.description}:</b> ${f.frequency_mhz} MHz`).join('<br>')
-          : 'No frequency data available';
-
-        const skyVectorUrl = createSkyVectorUrl(airport);  // Get SkyVector link
-
-        // Create popup content with airport info and action buttons
-        return `
-          <b>${airport.icao}</b><br>
-          ${airport.name}<br><br>
-          ${freqList}<br><br>
-          <a href="${skyVectorUrl}" target="_blank" style="color: #007bff; text-decoration: none;">
-            View on SkyVector</a><br>               
-          <br>
-          <div style="display: flex; gap: 10px; justify-content: center;">
-            <button onclick="setAsFrom('${airport.icao}')" style="padding: 8px 12px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">
-              Set as FROM
-            </button>
-            <button onclick="setAsTo('${airport.icao}')" style="padding: 8px 12px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">
-              Set as TO
-            </button>
-            <button onclick="directToAirport('${airport.icao}')" style="padding: 8px 12px; background-color: #fd7e14; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">
-              Direct To
-            </button>
-          </div>`;
-      })
-      .bindTooltip(() => {
-        // Create tooltip with airport info
-        const freqList = airport.freq && airport.freq.length
-          ? airport.freq.map(f => `${f.description}: ${f.frequency_mhz}`).join('<br>')
-          : 'No frequency data';
-
-        return `
-          <b>${airport.icao}</b><br>
-          ${airport.name}<br>
-          ${freqList}`;
-      }, {
-        permanent: false,
-        direction: 'top',
-        offset: [0, -10]
+      .on('click', () => {
+        // Show airport frequencies in panel instead of popup
+        showAirportFrequencies(airport);
       });
     
     // Store marker reference for visibility control
@@ -358,9 +269,6 @@ function setAsFrom(icao) {
   document.getElementById('route-from-display').textContent = icao;
   document.getElementById('route-from-display').classList.add('filled');
   updateRouteButton();
-  
-  // Close the popup
-  map.closePopup();
 }
 
 // Function to set airport as TO destination
@@ -369,9 +277,6 @@ function setAsTo(icao) {
   document.getElementById('route-to-display').textContent = icao;
   document.getElementById('route-to-display').classList.add('filled');
   updateRouteButton();
-  
-  // Close the popup
-  map.closePopup();
 }
 
 // Function to set direct-to airport from current aircraft position
@@ -421,9 +326,6 @@ function directToAirport(icao) {
   document.getElementById('route-distance').textContent = `${distance.toFixed(1)} nm`;
   document.getElementById('route-info').style.display = 'block';
   
-  // Update radio page with direct-to information
-  updateDirectToRadioInfo(toAirport);
-  
   // Create route endpoint markers
   const routeIcon = L.divIcon({
     html: '📍',
@@ -444,9 +346,6 @@ function directToAirport(icao) {
   
   // Fit map to show both points
   map.fitBounds(routeLine.getBounds(), { padding: [50, 50] });
-  
-  // Close the popup
-  map.closePopup();
 }
 
 // Function to update route button state (enabled/disabled)
@@ -470,10 +369,22 @@ function drawRoute() {
   const fromIcao = selectedFromAirport;
   const toIcao = selectedToAirport;
   
-  // Clear previous route
-  clearRoute();
+  // Clear previous route line and markers only (don't clear airport selections)
+  if (routeLine) {
+    map.removeLayer(routeLine);
+    routeLine = null;
+  }
   
-  // Restore the selected airports after clearing
+  // Remove route markers
+  routeMarkers.forEach(marker => {
+    map.removeLayer(marker);
+  });
+  routeMarkers = [];
+  
+  // Hide route info
+  document.getElementById('route-info').style.display = 'none';
+  
+  // Restore the selected airports
   selectedFromAirport = fromIcao;
   selectedToAirport = toIcao;
   
@@ -516,9 +427,6 @@ function drawRoute() {
   document.getElementById('route-bearing').textContent = `${bearing.toFixed(1)}°`;
   document.getElementById('route-distance').textContent = `${distance.toFixed(1)} nm`;
   document.getElementById('route-info').style.display = 'block';
-  
-  // Update radio page route information
-  updateRadioRouteInfo(fromAirport, toAirport);
 
   // Create route endpoint markers
   const routeIcon = L.divIcon({
@@ -575,84 +483,6 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
   return R * c;
 }
 
-// Function to update radio page with route information for FROM and TO airports
-function updateRadioRouteInfo(fromAirport, toAirport) {
-  // Show the route info display
-  document.getElementById('route-info-display').style.display = 'flex';
-  
-  // Update FROM airport information
-  document.getElementById('radio-from-icao').textContent = fromAirport.icao;
-  document.getElementById('radio-from-name').textContent = fromAirport.name;
-  
-  // Format frequencies for FROM airport
-  if (fromAirport.freq && fromAirport.freq.length > 0) {
-    const freqHtml = formatFrequenciesForDisplay(fromAirport.freq);
-    document.getElementById('radio-from-freq').innerHTML = freqHtml;
-    document.getElementById('radio-from-freq').className = fromAirport.freq.length > 6 ? 'frequencies multi-column' : 'frequencies';
-  } else {
-    document.getElementById('radio-from-freq').textContent = 'No freq listed';
-    document.getElementById('radio-from-freq').className = 'frequencies no-freq';
-  }
-  
-  // Update TO airport information
-  document.getElementById('radio-to-icao').textContent = toAirport.icao;
-  document.getElementById('radio-to-name').textContent = toAirport.name;
-  
-  // Format frequencies for TO airport
-  if (toAirport.freq && toAirport.freq.length > 0) {
-    const freqHtml = formatFrequenciesForDisplay(toAirport.freq);
-    document.getElementById('radio-to-freq').innerHTML = freqHtml;
-    document.getElementById('radio-to-freq').className = toAirport.freq.length > 6 ? 'frequencies multi-column' : 'frequencies';
-  } else {
-    document.getElementById('radio-to-freq').textContent = 'No freq listed';
-    document.getElementById('radio-to-freq').className = 'frequencies no-freq';
-  }
-}
-
-// Function to format frequencies for multi-column display when there are many frequencies
-function formatFrequenciesForDisplay(frequencies) {
-  if (frequencies.length <= 6) {
-    // Single column for 6 or fewer frequencies
-    return frequencies.map(f => `${f.description}: ${f.frequency_mhz}`).join('<br>');
-  } else {
-    // Multi-column for more than 6 frequencies
-    const midPoint = Math.ceil(frequencies.length / 2);
-    const leftColumn = frequencies.slice(0, midPoint);
-    const rightColumn = frequencies.slice(midPoint);
-    
-    const leftHtml = leftColumn.map(f => `${f.description}: ${f.frequency_mhz}`).join('<br>');
-    const rightHtml = rightColumn.map(f => `${f.description}: ${f.frequency_mhz}`).join('<br>');
-    
-    return `<div class="freq-column">${leftHtml}</div><div class="freq-column">${rightHtml}</div>`;
-  }
-}
-
-// Function to update radio page with direct-to information (from current position)
-function updateDirectToRadioInfo(toAirport) {
-  // Show the route info display
-  document.getElementById('route-info-display').style.display = 'flex';
-  
-  // Update FROM airport information (Current Position)
-  document.getElementById('radio-from-icao').textContent = 'Current Position';
-  document.getElementById('radio-from-name').textContent = 'Aircraft Location';
-  document.getElementById('radio-from-freq').textContent = 'No frequencies';
-  document.getElementById('radio-from-freq').className = 'frequencies no-freq';
-  
-  // Update TO airport information
-  document.getElementById('radio-to-icao').textContent = toAirport.icao;
-  document.getElementById('radio-to-name').textContent = toAirport.name;
-  
-  // Format frequencies for TO airport
-  if (toAirport.freq && toAirport.freq.length > 0) {
-    const freqHtml = formatFrequenciesForDisplay(toAirport.freq);
-    document.getElementById('radio-to-freq').innerHTML = freqHtml;
-    document.getElementById('radio-to-freq').className = toAirport.freq.length > 6 ? 'frequencies multi-column' : 'frequencies';
-  } else {
-    document.getElementById('radio-to-freq').textContent = 'No freq listed';
-    document.getElementById('radio-to-freq').className = 'frequencies no-freq';
-  }
-}
-
 // Function to clear current route and reset all route-related displays
 function clearRoute() {
   if (routeLine) {
@@ -682,11 +512,33 @@ function clearRoute() {
   // Hide route info
   document.getElementById('route-info').style.display = 'none';
   
-  // Hide radio page route information
-  document.getElementById('route-info-display').style.display = 'none';
-  
   // Disable route button
   updateRouteButton();
+}
+
+// Add route action buttons to airport frequency panel
+function addRouteActionsToPanel(airport) {
+  const frequencyList = document.getElementById('frequency-list');
+  
+  // Add route action buttons
+  const routeActions = document.createElement('div');
+  routeActions.className = 'frequency-item';
+  routeActions.style.borderTop = '2px solid #007bff';
+  routeActions.style.marginTop = '10px';
+  routeActions.style.paddingTop = '10px';
+  
+  routeActions.innerHTML = `
+    <div class="frequency-info">
+      <div class="frequency-description">Route Actions</div>
+    </div>
+    <div class="frequency-links">
+      <button class="frequency-link" onclick="setAsFrom('${airport.icao}')" style="background-color: #28a745;">FROM</button>
+      <button class="frequency-link" onclick="setAsTo('${airport.icao}')" style="background-color: #007bff;">TO</button>
+      <button class="frequency-link" onclick="directToAirport('${airport.icao}')" style="background-color: #fd7e14;">Direct</button>
+    </div>
+  `;
+  
+  frequencyList.appendChild(routeActions);
 }
 
 // Aircraft tracking and WebSocket communication
