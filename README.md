@@ -1,6 +1,6 @@
 # Aerofly FS4 Data Integration with SayIntentions ATC and Moving Map
 
-This application allows you to connect Aerofly fs4 to SayIntentions ATC using VR or a tablet.  It also has a moving map.
+This application contains a moving map that lists all the airports in Aerofly FS 4 and it written for VR integration using tools like [OS Overlay](https://store.steampowered.com/app/1173510/XSOverlay/).  In addition, this application allows you to connect Aerofly fs4 to SayIntentions ATC.  This application can be used in VR or on a seperate tablet.
 
 **VERY IMPORTANT:** Read the [instructions.pdf](instructions.pdf) file to see how to set up and install this application.
 
