@@ -117,6 +117,196 @@ html, body {
   font-size: 12px;
 }
 
+/* Search Box (Upper Right) */
+.search-box-container {
+  position: fixed;
+  top: 20px;
+  left: 603px;
+  z-index: 1000;
+}
+
+.search-box {
+  min-width: 300px;
+}
+
+.search-input-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-input-container input[type="text"] {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+}
+
+.search-input-container input[type="text"]:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.search-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.go-to-button {
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: bold;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.go-to-button:hover {
+  background-color: #218838;
+}
+
+.clear-search-button {
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: bold;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.clear-search-button:hover {
+  background-color: #c82333;
+}
+
+/* VR Keyboard */
+.vr-keyboard {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2000;
+  background-color: white;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  max-width: 712px;
+  max-height: 420px;
+  overflow: hidden;
+}
+
+.keyboard-container {
+  padding: 20px;
+}
+
+.keyboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.keyboard-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.close-keyboard {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.close-keyboard:hover {
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+.keyboard-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.keyboard-key {
+  padding: 12px 8px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+  user-select: none;
+  min-width: 40px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.keyboard-key:hover {
+  background-color: #e9ecef;
+  border-color: #007bff;
+}
+
+.keyboard-key:active {
+  background-color: #007bff;
+  color: white;
+}
+
+.keyboard-key.space {
+  grid-column: span 3;
+}
+
+.keyboard-key.backspace {
+  grid-column: span 1;
+  background-color: #dc3545;
+  color: white;
+}
+
+.keyboard-key.backspace:hover {
+  background-color: #c82333;
+}
+
+.keyboard-key.com-button {
+  grid-column: span 1;
+  background-color: #28a745;
+  color: white;
+  font-size: 12px;
+}
+
+.keyboard-key.com-button:hover {
+  background-color: #218838;
+}
+
 /* Second Row Controls */
 .second-row-controls {
   position: fixed;

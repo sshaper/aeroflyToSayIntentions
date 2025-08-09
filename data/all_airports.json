@@ -36,133 +36,8 @@
     "lon": -80.274803161621,
     "link": "https://skyvector.com/airport/07FA/Ocean-Reef-Club-Airport",
     "freq": [
-    {
-      "description": "AWOS-3T",
-      "frequency_mhz": 119.025
-    },
-    {
-      "description": "AWOS-3T Tel",
-      "frequency_mhz": 305.3673013
-    },
-    {
-      "description": "BNFSH STAR",
-      "frequency_mhz": 124.85
-    },
-    {
-      "description": "BNFSH STAR (UHF)",
-      "frequency_mhz": 263.025
-    },
-    {
-      "description": "VACAY DP",
-      "frequency_mhz": 125.5
-    },
-    {
-      "description": "FROGZ STAR",
-      "frequency_mhz": 120.5
-    },
-    {
-      "description": "FROGZ STAR (UHF)",
-      "frequency_mhz": 350.225
-    },
-    {
-      "description": "CSTAL STAR",
-      "frequency_mhz": 124.85
-    },
-    {
-      "description": "CSTAL STAR (UHF)",
-      "frequency_mhz": 263.025
-    },
-    {
-      "description": "LUUCE STAR",
-      "frequency_mhz": 126.05
-    },
-    {
-      "description": "LUUCE STAR (7000 FT)",
-      "frequency_mhz": 133.775
-    },
-    {
-      "description": "LUUCE STAR (UHF)",
-      "frequency_mhz": 251.1
-    },
-    {
-      "description": "LUUCE STAR (UHF 7000 FT)",
-      "frequency_mhz": 371.9
-    },
-    {
-      "description": "UNICOM",
-      "frequency_mhz": 122.725
-    },
-    {
-      "description": "SNDBR STAR",
-      "frequency_mhz": 120.5
-    },
-    {
-      "description": "SNDBR STAR (UHF)",
-      "frequency_mhz": 350.225
-    },
-    {
-      "description": "TARPN STAR",
-      "frequency_mhz": 126.05
-    },
-    {
-      "description": "TARPN STAR (7000 FT)",
-      "frequency_mhz": 133.775
-    },
-    {
-      "description": "TARPN STAR (UHF)",
-      "frequency_mhz": 251.1
-    },
-    {
-      "description": "TARPN STAR (UHF 7000 FT)",
-      "frequency_mhz": 371.9
-    },
-    {
-      "description": "TARPN STAR (12000 FT)",
-      "frequency_mhz": 124.6
-    },
-    {
-      "description": "TARPN STAR (UHF 12000 FT)",
-      "frequency_mhz": 317.4
-    },
-    {
-      "description": "PALMZ STAR",
-      "frequency_mhz": 120.5
-    },
-    {
-      "description": "PALMZ STAR (UHF)",
-      "frequency_mhz": 350.225
-    },
-    {
-      "description": "CTAF",
-      "frequency_mhz": 122.725
-    },
-    {
-      "description": "VIICE STAR",
-      "frequency_mhz": 120.5
-    },
-    {
-      "description": "VIICE STAR (UHF)",
-      "frequency_mhz": 350.225
-    },
-    {
-      "description": "FOWEE STAR",
-      "frequency_mhz": 120.5
-    },
-    {
-      "description": "FOWEE STAR (UHF)",
-      "frequency_mhz": 350.225
-    },
-    {
-      "description": "AWOS-3PT at K70 (0.4 SW)",
-      "frequency_mhz": 119.025
-    },
-    {
-      "description": "AWOS-3PT Tel",
-      "frequency_mhz": 305.3673013
-    },
-    {
-      "description": "ATIS at HST (11.5 NW)",
-      "frequency_mhz": 269.9
+    { "description": "UNIC",
+      "frequency_mhz": 122.700
     }
   ]
   },
@@ -176,18 +51,6 @@
       {
         "description": "CTAF",
         "frequency_mhz": 122.9
-      },
-      {
-        "description": "ASOS at MHS (3.8 NW)",
-        "frequency_mhz": 120.775
-      },
-      {
-        "description": "AWOS-3 at O86 (25.4 SW)",
-        "frequency_mhz": 134.3
-      },
-      {
-        "description": "ASOS at SIY (31.9 N)",
-        "frequency_mhz": 121.125
       }
     ]
   },
@@ -203,22 +66,6 @@
         "frequency_mhz": 119.775
       },
       {
-        "description": "ATLANTIC CITY APPROACH",
-        "frequency_mhz": 124.6
-      },
-      {
-        "description": "ATLANTIC CITY APPROACH (UHF)",
-        "frequency_mhz": 327.125
-      },
-      {
-        "description": "ATLANTIC CITY DEPARTURE",
-        "frequency_mhz": 124.6
-      },
-      {
-        "description": "ATLANTIC CITY DEPARTURE (UHF)",
-        "frequency_mhz": 327.125
-      },
-      {
         "description": "CLEARANCE DELIVERY",
         "frequency_mhz": 133.6
       },
@@ -229,22 +76,179 @@
       {
         "description": "CTAF",
         "frequency_mhz": 122.7
-      },
-      {
-        "description": "AWOS-3 at OBI (9.1 W)",
-        "frequency_mhz": 120.475
-      },
-      {
-        "description": "ATIS at ACY (11.7 N)",
-        "frequency_mhz": 125.725
       }
+      
     ]
   },
   {
     "icao": "62CA",
-    "name": "Bank of America Data Center Heliport",
-    "lat": 34.053668,
-    "lon": -118.253183,
+    "name": "LA City Heliport 1",
+    "type":"Heliport",
+    "lat": 34.0527,
+    "lon": -118.2557,
+    "link": "https://skyvector.com/airport/62CA/Bank-of-America-Data-Center-Heliport",
+     "freq": [
+      {
+        "description": "ATIS at HHR (9.3 SW)",
+        "frequency_mhz": 118.4
+      },
+      {
+        "description": "D-ATIS at BUR (9.9 NW)",
+        "frequency_mhz": 135.125
+      }
+    ]
+  },
+  {
+    "icao": "62CA1",
+    "name": "LA City Heliport 2",
+    "type":"Heliport",
+    "lat": 34.0555,
+    "lon": -118.2586,
+    "link": "https://skyvector.com/airport/62CA/Bank-of-America-Data-Center-Heliport",
+     "freq": [
+      {
+        "description": "ATIS at HHR (9.3 SW)",
+        "frequency_mhz": 118.4
+      },
+      {
+        "description": "D-ATIS at BUR (9.9 NW)",
+        "frequency_mhz": 135.125
+      }
+    ]
+  },
+  
+  {
+    "icao": "62CA2",
+    "name": "LA City Heliport 3",
+    "type":"Heliport",
+    "lat": 34.0544,
+    "lon": -118.2557,
+    "link": "https://skyvector.com/airport/62CA/Bank-of-America-Data-Center-Heliport",
+     "freq": [
+      {
+        "description": "ATIS at HHR (9.3 SW)",
+        "frequency_mhz": 118.4
+      },
+      {
+        "description": "D-ATIS at BUR (9.9 NW)",
+        "frequency_mhz": 135.125
+      }
+    ]
+  },
+  {
+    "icao": "62CA3",
+    "name": "LA City Heliport 4",
+    "type":"Heliport",
+    "lat": 34.0537,
+    "lon": -118.2532,
+    "link": "https://skyvector.com/airport/62CA/Bank-of-America-Data-Center-Heliport",
+     "freq": [
+      {
+        "description": "ATIS at HHR (9.3 SW)",
+        "frequency_mhz": 118.4
+      },
+      {
+        "description": "D-ATIS at BUR (9.9 NW)",
+        "frequency_mhz": 135.125
+      }
+    ]
+  },
+  {
+    "icao": "62CA4",
+    "name": "LA City Heliport 5",
+    "type":"Heliport",
+    "lat": 34.0503,
+    "lon": -118.2550,
+    "link": "https://skyvector.com/airport/62CA/Bank-of-America-Data-Center-Heliport",
+     "freq": [
+      {
+        "description": "ATIS at HHR (9.3 SW)",
+        "frequency_mhz": 118.4
+      },
+      {
+        "description": "D-ATIS at BUR (9.9 NW)",
+        "frequency_mhz": 135.125
+      }
+    ]
+  },
+  {
+    "icao": "62CA5",
+    "name": "LA City Heliport 6",
+    "type":"Heliport",
+    "lat": 34.0515,
+    "lon": -118.2570,
+    "link": "https://skyvector.com/airport/62CA/Bank-of-America-Data-Center-Heliport",
+     "freq": [
+      {
+        "description": "ATIS at HHR (9.3 SW)",
+        "frequency_mhz": 118.4
+      },
+      {
+        "description": "D-ATIS at BUR (9.9 NW)",
+        "frequency_mhz": 135.125
+      }
+    ]
+  },
+  {
+    "icao": "62CA6",
+    "name": "LA City Heliport 7",
+    "type":"Heliport",
+    "lat": 34.0493,
+    "lon": -118.2567,
+    "link": "https://skyvector.com/airport/62CA/Bank-of-America-Data-Center-Heliport",
+     "freq": [
+      {
+        "description": "ATIS at HHR (9.3 SW)",
+        "frequency_mhz": 118.4
+      },
+      {
+        "description": "D-ATIS at BUR (9.9 NW)",
+        "frequency_mhz": 135.125
+      }
+    ]
+  },
+  {
+    "icao": "62CA7",
+    "name": "LA City Heliport 8",
+    "type":"Heliport",
+    "lat": 34.0508,
+    "lon": -118.2592,
+    "link": "https://skyvector.com/airport/62CA/Bank-of-America-Data-Center-Heliport",
+     "freq": [
+      {
+        "description": "ATIS at HHR (9.3 SW)",
+        "frequency_mhz": 118.4
+      },
+      {
+        "description": "D-ATIS at BUR (9.9 NW)",
+        "frequency_mhz": 135.125
+      }
+    ]
+  },
+  {
+    "icao": "62CA8",
+    "name": "LA City Heliport 9",
+    "type":"Heliport",
+    "lat": 34.0493,
+    "lon": -118.2607,
+    "link": "https://skyvector.com/airport/62CA/Bank-of-America-Data-Center-Heliport",
+     "freq": [
+      {
+        "description": "ATIS at HHR (9.3 SW)",
+        "frequency_mhz": 118.4
+      },
+      {
+        "description": "D-ATIS at BUR (9.9 NW)",
+        "frequency_mhz": 135.125
+      }
+    ]
+  },
+  {
+    "icao": "62CA9",
+    "name": "LA City Heliport 10",
+    "type":"Heliport",
+    "lat": 34.0485,
+    "lon": -118.2614,
     "link": "https://skyvector.com/airport/62CA/Bank-of-America-Data-Center-Heliport",
      "freq": [
       {
@@ -1350,6 +1354,7 @@
   {
     "icao": "SWSY",
     "name": "Fazenda Santa In\u00eas Heliport",
+    "type":"Heliport",
     "lat": -22.176727,
     "lon": -46.715287,
     "link": "unavailable",
@@ -1358,6 +1363,7 @@
   {
     "icao": "SDPE",
     "name": "Pampas Heliport",
+    "type":"Heliport",
     "lat": -29.361342,
     "lon": -50.839693,
     "link": "unavailable",
@@ -1366,6 +1372,7 @@
   {
     "icao": "SCCC",
     "name": "Kuehlmeyer Heliport",
+    "type":"Heliport",
     "lat": -3.510072,
     "lon": -38.889581,
     "link": "unavailable",
@@ -1379,6 +1386,7 @@
   {
     "icao": "SSBZ",
     "name": "Ernesto Heliport",
+    "type":"Heliport",
     "lat": -15.334498,
     "lon": -59.256475,
     "link": "unavailable",
@@ -1499,6 +1507,7 @@
   {
     "icao": "SSID",
     "name": "Apodi Heliport",
+    "type":"Heliport",
     "lat": -3.668337,
     "lon": -38.850298,
     "link": "unavailable",
@@ -1515,6 +1524,7 @@
   {
     "icao": "SSPK",
     "name": "Panco 8 Helipad",
+    "type":"Heliport",
     "lat": -23.43095,
     "lon": -46.585363,
     "link": "unavailable",
@@ -1555,6 +1565,7 @@
   {
     "icao": "SWKG",
     "name": "Ilha da Gip\u00f3ia Heliport",
+    "type":"Heliport",
     "lat": -23.050079,
     "lon": -44.347796,
     "link": "unavailable",
@@ -1587,6 +1598,7 @@
   {
     "icao": "CA26",
     "name": "Hall of Justice Heliport",
+    "type": "Heliport",
     "lat": 37.774898529052734,
     "lon": -122.40499877929688,
     "link": "https://skyvector.com/airport/CA26/Hall-of-Justice-Heliport",
@@ -1604,6 +1616,7 @@
   {
     "icao": "CA27",
     "name": "Alcatraz Heliport",
+    "type": "Heliport",
     "lat": 37.825912,
     "lon": -122.421448,
     "link": "https://skyvector.com/airport/CA27/Alcatraz-Heliport",
@@ -1925,6 +1938,7 @@
   {
     "icao": "CN02",
     "name": "San Francisco VA Medical Center Heliport",
+    "type": "Heliport",
     "lat": 37.783331,
     "lon": -122.506389,
     "link": "https://skyvector.com/airport/CN02/San-Francisco-Va-Medical-Center-Heliport",
@@ -20410,7 +20424,8 @@
   },
   {
     "icao": "ENVR",
-    "name": "V\u00e6r\u00f8y Heliport",
+    "name": "Vaeroy Heliport",
+    "type":"Heliport",
     "lat": 67.654555,
     "lon": 12.727257,
     "link": "unavailable",
@@ -20625,17 +20640,17 @@
   },
   {
     "icao": "EPKT",
-    "name": "Katowice Wojciech Korfanty International Airport",
+    "name": "Katowice-Pyrzowice Airport",
     "lat": 50.476015,
     "lon": 19.080705,
-    "link": "unavailable",
+    "link": "https://skyvector.com/airport/EPKT/Katowice-Pyrzowice-Airport",
     "freq": [
       {
-        "description": "APP",
-        "frequency_mhz": 121.075
+        "description": "A/D",
+        "frequency_mhz": 121.07
       },
       {
-        "description": "GCCD",
+        "description": "ATIS",
         "frequency_mhz": 131.45
       },
       {
@@ -21180,22 +21195,18 @@
   },
   {
     "icao": "ESGG",
-    "name": "G\u00f6teborg Landvetter Airport",
+    "name": "Landvetter Airport",
     "lat": 57.6628,
     "lon": 12.2798,
-    "link": "unavailable",
+    "link": "https://skyvector.com/airport/ESGG/Landvetter-Airport",
     "freq": [
       {
         "description": "ATIS",
         "frequency_mhz": 118.375
       },
       {
-        "description": "GCCD",
+        "description": "GRND",
         "frequency_mhz": 121.9
-      },
-      {
-        "description": "TCA",
-        "frequency_mhz": 124.68
       },
       {
         "description": "TWR",
@@ -21205,7 +21216,7 @@
   },
   {
     "icao": "ESGJ",
-    "name": "J\u00f6nk\u00f6ping Airport",
+    "name": "https://skyvector.com/airport/ESGJ/Jonkoping-Airport",
     "lat": 57.757598876953125,
     "lon": 14.068699836730957,
     "link": "unavailable",
@@ -22063,60 +22074,42 @@
     "name": "Spangdahlem Air Base",
     "lat": 49.976507,
     "lon": 6.698413,
-    "link": "unavailable",
+    "link": "https://skyvector.com/airport/ETAD/Spangdahlem-Airport",
     "freq": [
       {
-        "description": "A/G",
-        "frequency_mhz": 141.775
-      },
-      {
         "description": "ATIS",
-        "frequency_mhz": 143.425
-      },
-      {
-        "description": "DEP",
-        "frequency_mhz": 314.6
-      },
-      {
-        "description": "DIR",
-        "frequency_mhz": 387.15
-      },
-      {
-        "description": "GCA",
-        "frequency_mhz": 129.475
-      },
-      {
-        "description": "GCCD",
-        "frequency_mhz": 308.85
+        "frequency_mhz": 128.765
       },
       {
         "description": "GND",
-        "frequency_mhz": 138.8
+        "frequency_mhz": 140.05
       },
       {
-        "description": "OPS",
-        "frequency_mhz": 131.975
+        "description": "CTAF",
+        "frequency_mhz": 123.5
       },
       {
-        "description": "PMSV",
-        "frequency_mhz": 284.425
-      },
-      {
-        "description": "POST",
-        "frequency_mhz": 258.7
-      },
-      {
-        "description": "PTD",
-        "frequency_mhz": 138.4
-      },
-      {
-        "description": "RDR",
-        "frequency_mhz": 125.6
+        "description": "RCHK",
+        "frequency_mhz": 118.01
       },
       {
         "description": "TWR",
         "frequency_mhz": 122.2
+      },
+      
+      {
+        "description": "CTR",
+        "frequency_mhz": 125.6
+      },
+      {
+        "description": "RDR",
+        "frequency_mhz": 129.475
+      },
+      {
+        "description": "RMP",
+        "frequency_mhz": 119.99
       }
+      
     ]
   },
   {
@@ -27562,6 +27555,7 @@
   {
     "icao": "GECE",
     "name": "Ceuta Heliport",
+    "type":"Heliport",
     "lat": 35.892657,
     "lon": -5.306321,
     "link": "unavailable",
@@ -29494,6 +29488,7 @@
   {
     "icao": "KL06",
     "name": "Kowloon Hills Heliport",
+    "type":"Heliport",
     "lat": 22.34638,
     "lon": 114.15287,
     "link": "unavailable",
@@ -29511,6 +29506,7 @@
   {
     "icao": "KL05",
     "name": "Ngong Shuen Barracks Depot Emergency Heliport",
+    "type":"Heliport",
     "lat": 22.321029,
     "lon": 114.140817,
     "link": "unavailable",
@@ -30634,6 +30630,7 @@
   {
     "icao": "KJRB",
     "name": "Downtown Manhattan Heliport",
+    "type":"Heliport",
     "lat": 40.700711,
     "lon": -74.008573,
     "link": "unavailable",
@@ -30955,15 +30952,11 @@
     "name": "Roosevelt Municipal Airport",
     "lat": 40.278301,
     "lon": -110.051003,
-    "link": "unavailable",
+    "link": "https://skyvector.com/airport/74V/Roosevelt-Municipal-Airport",
     "freq": [
       {
         "description": "AWOS",
         "frequency_mhz": 118.975
-      },
-      {
-        "description": "FSS",
-        "frequency_mhz": 122.1
       },
       {
         "description": "UNIC",
@@ -30976,8 +30969,17 @@
     "name": "Astronaut Kent Rominger Airport",
     "lat": 37.71360016,
     "lon": -106.3539963,
-    "link": "unavailable",
-    "freq": []
+    "link": "https://skyvector.com/airport/RCV/Astronaut-Kent-Rominger-Airport",
+    "freq": [
+      {
+        "description": "AWOS",
+        "frequency_mhz": 118.275
+      },
+      {
+        "description": "CTAF",
+        "frequency_mhz": 122.9      
+      }
+    ]
   },
   {
     "icao": "KCVC",
@@ -33372,7 +33374,7 @@
         "frequency_mhz": 120.3
       },
       {
-        "description": "GRND",
+        "description": "GND",
         "frequency_mhz": 121.6
       },
       {
@@ -44041,6 +44043,7 @@
   {
     "icao": "KEDG",
     "name": "Weide (Aberdeen Proving Ground) Army Heliport",
+    "type":"Heliport",
     "lat": 39.391602,
     "lon": -76.2911,
     "link": "unavailable",
@@ -50656,13 +50659,34 @@
     "link": "https://skyvector.com/airport/HAF/Half-Moon-Bay-Airport",
     "freq": [
       {
-        "description": "A/D",
+        "description": "DEP",
         "frequency_mhz": 135.1
       },
       {
-        "description": "UNIC",
+        "description": "FSS",
+        "frequency_mhz": 122.5
+      },
+      {
+        "description": "AWOS",
+        "frequency_mhz": 127.275
+      },
+      {
+        "description": "RCHK",
+        "frequency_mhz": 118.01
+      },
+      {
+        "description": "CTAF",
         "frequency_mhz": 122.8
+      },
+      {
+        "description": "RMP",
+        "frequency_mhz": 119.99
+      },
+      {
+        "description": "CTR",
+        "frequency_mhz": 134.15
       }
+
     ]
   },
   {
@@ -90915,6 +90939,7 @@
   {
     "icao": "LMMG",
     "name": "Xewkija Heliport",
+    "type":"Heliport",
     "lat": 36.027199,
     "lon": 14.2728,
     "link": "unavailable",
@@ -117304,6 +117329,7 @@
   {
     "icao": "SWON",
     "name": "J\u00falio Sim\u00f5es \u2013 Garagem Heliport",
+    "type":"Heliport",
     "lat": -23.541878,
     "lon": -46.229307,
     "link": "unavailable",
@@ -123741,6 +123767,7 @@
   {
     "icao": "SWVB",
     "name": "ICPB Heliport",
+    "type": "Heliport",
     "lat": -27.143296,
     "lon": -48.532353,
     "link": "unavailable",

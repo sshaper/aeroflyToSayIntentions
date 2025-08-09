@@ -221,9 +221,15 @@ fetch('data/all_airports.json?cacheBust=' + Date.now())
   allAirportsData = airports;
   
   airports.forEach(airport => {
+    // Choose icon based on airport type
+    let iconHtml = '🏢'; // Default airport icon
+    if (airport.type === 'Heliport') {
+      iconHtml = '🚁'; // Heliport icon
+    }
+    
     // Create custom airport icon
     const airportIcon = L.divIcon({
-      html: '🏢',
+      html: iconHtml,
       className: 'airport-icon',
       iconSize: [20, 20],
       iconAnchor: [10, 10]
@@ -644,6 +650,181 @@ function connectWebSocket() {
 
 // Initialize aircraft follow setting (default: enabled)
 window.followAircraft = true;
+
+// Search functionality
+function searchAirport() {
+  const searchInput = document.getElementById('airport-search');
+  const icao = searchInput.value.trim().toUpperCase();
+  
+  if (!icao) {
+    alert('Please enter an airport ICAO code');
+    return;
+  }
+  
+  // Search for airport in the loaded data
+  const airport = allAirportsData.find(a => a.icao === icao);
+  
+  if (airport) {
+    // Found the airport - center map on it
+    map.setView([airport.lat, airport.lon], 12);
+    
+    // Uncheck follow aircraft to prevent returning to aircraft position
+    const followCheckbox = document.getElementById('aircraft-follow-toggle');
+    if (followCheckbox.checked) {
+      followCheckbox.checked = false;
+      toggleAircraftFollow();
+    }
+    
+    // Clear the search input
+    searchInput.value = '';
+    
+    // Hide VR keyboard if it's open
+    hideVRKeyboard();
+    
+    console.log(`Found airport: ${airport.icao} - ${airport.name}`);
+  } else {
+    // Airport not found - keep keyboard open, clear field, and focus
+    alert('Airport not found');
+    searchInput.value = '';
+    searchInput.focus();
+    // Don't hide the keyboard - let user try again
+  }
+}
+
+function clearSearch() {
+  const searchInput = document.getElementById('airport-search');
+  searchInput.value = '';
+  hideVRKeyboard();
+}
+
+// VR Keyboard functionality
+let vrKeyboardVisible = false;
+
+function showVRKeyboard() {
+  const keyboard = document.getElementById('vr-keyboard');
+  const keyboardGrid = document.getElementById('keyboard-grid');
+  
+  // Generate keyboard keys if not already done
+  if (keyboardGrid.children.length === 0) {
+    generateKeyboardKeys();
+  }
+  
+  keyboard.style.display = 'block';
+  vrKeyboardVisible = true;
+}
+
+function hideVRKeyboard() {
+  const keyboard = document.getElementById('vr-keyboard');
+  keyboard.style.display = 'none';
+  vrKeyboardVisible = false;
+}
+
+function generateKeyboardKeys() {
+  const keyboardGrid = document.getElementById('keyboard-grid');
+  
+  // Define the keys for ICAO codes and frequencies (letters, numbers, and period)
+  const keys = [
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+    'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+    'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3',
+    '4', '5', '6', '7', '8', '9', '.'
+  ];
+  
+  // Clear existing keys
+  keyboardGrid.innerHTML = '';
+  
+  // Create key elements
+  keys.forEach(key => {
+    const keyElement = document.createElement('div');
+    keyElement.className = 'keyboard-key';
+    keyElement.textContent = key;
+    keyElement.onclick = () => typeKey(key);
+    keyboardGrid.appendChild(keyElement);
+  });
+  
+  // Add backspace key
+  const backspaceKey = document.createElement('div');
+  backspaceKey.className = 'keyboard-key backspace';
+  backspaceKey.textContent = '⌫';
+  backspaceKey.onclick = () => backspace();
+  keyboardGrid.appendChild(backspaceKey);
+
+  // Add COM 1 button
+  const com1Key = document.createElement('div');
+  com1Key.className = 'keyboard-key com-button';
+  com1Key.textContent = 'com 1';
+  com1Key.onclick = () => setComFrequency('com1');
+  keyboardGrid.appendChild(com1Key);
+  
+  // Add COM 2 button
+  const com2Key = document.createElement('div');
+  com2Key.className = 'keyboard-key com-button';
+  com2Key.textContent = 'com 2';
+  com2Key.onclick = () => setComFrequency('com2');
+  keyboardGrid.appendChild(com2Key);
+  
+  
+}
+
+function typeKey(key) {
+  const searchInput = document.getElementById('airport-search');
+  const currentValue = searchInput.value;
+  
+  // Allow up to 7 characters for frequencies (e.g., 118.500)
+  if (currentValue.length < 7) {
+    searchInput.value = currentValue + key;
+  }
+}
+
+function backspace() {
+  const searchInput = document.getElementById('airport-search');
+  const currentValue = searchInput.value;
+  
+  if (currentValue.length > 0) {
+    searchInput.value = currentValue.slice(0, -1);
+  }
+}
+
+function setComFrequency(com) {
+  const searchInput = document.getElementById('airport-search');
+  const frequency = searchInput.value.trim();
+  
+  if (!frequency) {
+    alert('Please enter a frequency first');
+    return;
+  }
+  
+  // Set the frequency as standby for the specified COM
+  radioState[com].standby = frequency;
+  updateDisplay(com);
+  
+  // Clear the input and keep focus
+  searchInput.value = '';
+  searchInput.focus();
+  
+  console.log(`Set ${com} standby frequency to ${frequency}`);
+}
+
+// Close keyboard when clicking outside
+document.addEventListener('click', function(event) {
+  const keyboard = document.getElementById('vr-keyboard');
+  const searchInput = document.getElementById('airport-search');
+  
+  if (vrKeyboardVisible && 
+      !keyboard.contains(event.target) && 
+      !searchInput.contains(event.target)) {
+    hideVRKeyboard();
+  }
+});
+
+// Close keyboard when pressing Enter or Escape
+document.addEventListener('keydown', function(event) {
+  if (vrKeyboardVisible) {
+    if (event.key === 'Enter' || event.key === 'Escape') {
+      hideVRKeyboard();
+    }
+  }
+});
 
 // Start WebSocket connection
 connectWebSocket();
