@@ -3,16 +3,17 @@ title Aerofly Moving Map Launcher
 echo Starting Aerofly Moving Map...
 echo.
 
+
 REM Start the UDP to WebSocket server in a new window
 echo Starting UDP to WebSocket server...
-start "UDP to WebSocket Server" cmd /k "python python/udp_to_websocket.py"
+start "UDP to WebSocket Server" cmd /k python python/udp_to_websocket.py
 
 REM Wait a moment for the first server to start
 timeout /t 2 /nobreak >nul
 
 REM Start the HTTP server in a new window
 echo Starting HTTP server...
-start "HTTP Server" cmd /k "python -m http.server 8080"
+start "HTTP Server" cmd /k python -m http.server 8080
 
 REM Wait a moment for the HTTP server to start
 timeout /t 3 /nobreak >nul
