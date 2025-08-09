@@ -1,5 +1,0 @@
-This is a change log file to document changes to the application.
-
-08/7/2025  - Major interface change.  Functionality is mostly the same.  The radio page was removed and the coms were moved to the map page.  There is no longer a hover over the airport icon.  However when you click on a airport you get a dialog box were you can select what frequency is com1 or com2 by clicking the button and that will automatically be added to the standby side of the com.  Much easier to use in VR. 
-
-08/6/2025  - Updated the Map interface to work better in VR.  Added more skyvector links and frequencies to the data/all_airports.json file
