@@ -17,7 +17,8 @@ Shows the 5nm and 10nm rings
 **Update 8/6/2025**  Different map modes were changed from dropdown to radio buttons better in VR.
 
 **Videos**
-This video demonstrates how to open the app and sayintentions into Aerofly fs4 while in VR.
+
+This video demonstrates how to open the app and sayintentions into Aerofly fs4 while in VR using OS Overlay.
 
 https://youtu.be/MGfnTeG3Pkg
 
