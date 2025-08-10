@@ -57,11 +57,21 @@ function showAirportFrequencies(airport) {
   const title = document.getElementById('airport-panel-title');
   const frequencyList = document.getElementById('frequency-list');
   
-  // Set panel title
-  title.textContent = `${airport.icao} - ${airport.name}`;
+  // Set panel title and add SkyVector link
+  title.innerHTML = `
+    <div>${airport.icao} - ${airport.name}</div>
+    <div style="margin-top: 5px; font-size: 12px;">
+      <a href="${createSkyVectorUrl(airport)}" target="_blank" style="color: white; text-decoration: underline;">
+        📍 View on SkyVector
+      </a>
+    </div>
+  `;
   
   // Clear existing frequencies
   frequencyList.innerHTML = '';
+  
+  // Note: We no longer hide airspace rings from previous airports
+  // Each airport's rings remain visible until their checkbox is unchecked
   
   // Add frequencies to panel
   if (airport.freq && airport.freq.length > 0) {
@@ -100,6 +110,9 @@ function showAirportFrequencies(airport) {
 function closeAirportPanel() {
   const panel = document.getElementById('airport-frequency-panel');
   panel.style.display = 'none';
+  
+  // Note: We no longer hide airspace rings when panel is closed
+  // Each airport's rings remain visible until their checkbox is unchecked
 }
 
 function setFrequency(com, frequency) {
@@ -533,6 +546,9 @@ function addRouteActionsToPanel(airport) {
   routeActions.style.marginTop = '10px';
   routeActions.style.paddingTop = '10px';
   
+  // Check if this airport already has airspace rings visible
+  const hasRings = hasAirspaceRings(airport.icao);
+  
   routeActions.innerHTML = `
     <div class="frequency-info">
       <div class="frequency-description">Route Actions</div>
@@ -541,6 +557,10 @@ function addRouteActionsToPanel(airport) {
       <button class="frequency-link" onclick="setAsFrom('${airport.icao}')" style="background-color: #28a745;">FROM</button>
       <button class="frequency-link" onclick="setAsTo('${airport.icao}')" style="background-color: #007bff;">TO</button>
       <button class="frequency-link" onclick="directToAirport('${airport.icao}')" style="background-color: #fd7e14;">Direct</button>
+      <label class="airspace-checkbox-label">
+        <input type="checkbox" id="airspace-checkbox" onchange="toggleAirspaceRings('${airport.icao}')" ${hasRings ? 'checked' : ''}>
+        <span>Airspace</span>
+      </label>
     </div>
   `;
   
@@ -558,6 +578,83 @@ const aircraftIcon = L.divIcon({
 });
 
 let marker = null; // Aircraft marker on the map
+
+// Global variables for airspace rings - now supports multiple airports
+let airspaceRings = new Map(); // Map of airport ICAO to their rings
+
+// Function to toggle airspace rings around an airport
+function toggleAirspaceRings(icao) {
+  const checkbox = document.getElementById('airspace-checkbox');
+  
+  if (checkbox.checked) {
+    // Show airspace rings for this specific airport
+    showAirspaceRings(icao);
+  } else {
+    // Hide airspace rings for this specific airport
+    hideAirspaceRings(icao);
+  }
+}
+
+// Function to show airspace rings
+function showAirspaceRings(icao) {
+  // Find the airport data
+  const airport = allAirportsData.find(a => a.icao === icao);
+  if (!airport) return;
+  
+  // Convert nautical miles to meters (1 nm = 1852 meters)
+  const fiveNMMeters = 5 * 1852;
+  const tenNMMeters = 10 * 1852;
+  
+  // Create 5nm ring (green)
+  const fiveNMRing = L.circle([airport.lat, airport.lon], {
+    radius: fiveNMMeters,
+    color: '#28a745',
+    fillColor: '#28a745',
+    fillOpacity: 0.1,
+    weight: 2
+  }).addTo(map);
+  
+  // Create 10nm ring (blue)
+  const tenNMRing = L.circle([airport.lat, airport.lon], {
+    radius: tenNMMeters,
+    color: '#007bff',
+    fillColor: '#007bff',
+    fillOpacity: 0.1,
+    weight: 2
+  }).addTo(map);
+  
+  // Store references to rings for this specific airport
+  airspaceRings.set(icao, {
+    fiveNM: fiveNMRing,
+    tenNM: tenNMRing
+  });
+}
+
+// Function to hide airspace rings for a specific airport
+function hideAirspaceRings(icao) {
+  const rings = airspaceRings.get(icao);
+  if (rings) {
+    if (rings.fiveNM) {
+      map.removeLayer(rings.fiveNM);
+    }
+    if (rings.tenNM) {
+      map.removeLayer(rings.tenNM);
+    }
+    airspaceRings.delete(icao);
+  }
+}
+
+// Function to check if an airport has airspace rings visible
+function hasAirspaceRings(icao) {
+  return airspaceRings.has(icao);
+}
+
+// Function to clear all airspace rings (for cleanup)
+function clearAllAirspaceRings() {
+  airspaceRings.forEach((rings, icao) => {
+    hideAirspaceRings(icao);
+  });
+}
 
 // Function to establish WebSocket connection with Python backend
 function connectWebSocket() {

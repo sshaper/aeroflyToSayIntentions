@@ -33357,20 +33357,13 @@
     "lon": -83.74559783939999,
     "link": "https://skyvector.com/airport/ARB/Ann-Arbor-Municipal-Airport",
     "freq": [
-      {
-        "description": "A/D",
-        "frequency_mhz": 118.95
-      },
-      {
-        "description": "ASOS",
-        "frequency_mhz": 134.55
-      },
+      
       {
         "description": "ATIS",
         "frequency_mhz": 134.55
       },
       {
-        "description": "CTAF",
+        "description": "TWR",
         "frequency_mhz": 120.3
       },
       {
@@ -33378,12 +33371,16 @@
         "frequency_mhz": 121.6
       },
       {
-        "description": "TWR",
-        "frequency_mhz": 120.3
+        "description": "A/D",
+        "frequency_mhz": 118.95
       },
       {
         "description": "UNIC",
         "frequency_mhz": 123.0
+      },
+      {
+        "description": "CTAF",
+        "frequency_mhz": 120.3
       }
     ]
   },
@@ -43245,32 +43242,30 @@
     "freq": [
       {
         "description": "APP",
-        "frequency_mhz": 118.575
-      },
-      {
-        "description": "ATIS",
-        "frequency_mhz": 133.675
-      },
-      {
-        "description": "CLD",
-        "frequency_mhz": 120.65
+        "frequency_mhz": 124.05
       },
       {
         "description": "DEP",
-        "frequency_mhz": 118.575
+        "frequency_mhz": 118.95
+      },
+      {
+        "description": "TWR",
+        "frequency_mhz": 118.4
       },
       {
         "description": "GND",
         "frequency_mhz": 119.25
       },
       {
+        "description": "CLD",
+        "frequency_mhz": 120.65
+      },
+      
+      {
         "description": "RDO",
         "frequency_mhz": 115.7
       },
-      {
-        "description": "TWR",
-        "frequency_mhz": 118.4
-      },
+      
       {
         "description": "UNIC",
         "frequency_mhz": 122.95
@@ -55869,7 +55864,7 @@
     "name": "Jackson County Airport/Reynolds Field",
     "lat": 42.260509,
     "lon": -84.463019,
-    "link": "unavailable",
+    "link": "https://skyvector.com/airport/JXN/Jackson-County-Reynolds-Field-Airport",
     "freq": [
       {
         "description": "A/D",
@@ -71581,7 +71576,7 @@
     "name": "Brooks Field",
     "lat": 42.251202,
     "lon": -84.955498,
-    "link": "unavailable",
+    "link": "https://skyvector.com/airport/RMY/Brooks-Field-Airport",
     "freq": [
       {
         "description": "A/D",
@@ -81147,20 +81142,16 @@
         "frequency_mhz": 118.95
       },
       {
-        "description": "ASOS",
-        "frequency_mhz": 132.35
-      },
-      {
         "description": "ATIS",
         "frequency_mhz": 127.425
       },
       {
-        "description": "GND",
-        "frequency_mhz": 119.975
-      },
-      {
         "description": "TWR",
         "frequency_mhz": 125.275
+      },
+      {
+        "description": "GND",
+        "frequency_mhz": 119.975
       }
     ]
   },
