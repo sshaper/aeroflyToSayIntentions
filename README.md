@@ -5,9 +5,6 @@ This application contains a moving map that lists all the airports in Aerofly FS
 **VERY IMPORTANT:** Read the [instructions.pdf](instructions.pdf) file to see how to set up and install this application.
 
 **Latest Update Screenshot**
-Shows the 5nm and 10nm rings
-![Latest Interface](screenshots/update8102025.png)
-
 Shows the status bar at the top and the updated keyboard
 ![Latest Interface](screenshots/update8172025.png)
 
@@ -15,6 +12,9 @@ Shows the status bar at the top and the updated keyboard
 
 
 **Update 8/10/2025**  Feature was added to put 5nm and 10nm rings around any airport or multiple airports.
+
+Shows the 5nm and 10nm rings
+![Latest Interface](screenshots/update8102025.png)
 
 **Update 8/9/2025**  Box was added so you can go to an airport by entering its icao and clicking Go To. This will not move the plane there but will move the map to that airport.  Make creating from to routes much easier.  Pop up simple keyboard was added so you could enter ICAO's and frequencies.  On the keyboard two buttons were added "com 1" and "com 2", if you need to enter a custom frequencies not associated to that airport but is in SayIntentions.  You can enter it and it will appear in your standby.  Finally, heliport icons are used for airports that are actually heliports.   
 
