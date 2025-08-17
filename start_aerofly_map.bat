@@ -24,12 +24,12 @@ start http://localhost:8080/index.html
 
 REM Open sayintentions
 echo Opening say intentions
-start "" "C:\Users\sshaper\AppData\Roaming\SayIntentionsAI\SayIntentionsAI\SayIntentionsAI.exe"
+REM start "" "C:\Users\sshaper\AppData\Roaming\SayIntentionsAI\SayIntentionsAI\SayIntentionsAI.exe"
 
 
 REM Open SteamVR
 echo Opening SteamVR...
-start "" "C:\Program Files (x86)\Steam\steamapps\common\SteamVR\bin\win64\vrstartup.exe"
+REM start "" "C:\Program Files (x86)\Steam\steamapps\common\SteamVR\bin\win64\vrstartup.exe"
 
 
 echo.

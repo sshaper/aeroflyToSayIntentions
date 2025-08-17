@@ -29,11 +29,104 @@ import socket
 import json
 import time
 import os
+import signal
 
 # Network configuration
 UDP_PORT = 49002  # Port to receive UDP telemetry from Aerofly FS4
 WS_PORT = 8765    # Port for WebSocket server
 
+# Shutdown event for graceful termination
+shutdown_event = asyncio.Event()
+
+def signal_handler(signum, frame):
+    """Handle shutdown signals gracefully"""
+    print(f"\nReceived signal {signum}, shutting down gracefully...")
+    shutdown_event.set()
+
+def cleanup():
+    """Clean up resources before shutdown"""
+    print("Cleaning up resources...")
+    try:
+        sock.close()
+        print("UDP socket closed")
+    except Exception as e:
+        print(f"Error closing UDP socket: {e}")
+    
+    print("Cleanup complete")
+
+# Set up signal handlers
+signal.signal(signal.SIGINT, signal_handler)   # Ctrl+C
+signal.signal(signal.SIGTERM, signal_handler)  # Termination signal
+
+# Global variables to store WebSocket connections for status updates
+websocket_clients = set()
+
+# Connection monitoring
+last_data_time = time.time()
+CONNECTION_TIMEOUT = 5.0  # Consider disconnected after 5 seconds of no data
+
+async def monitor_connection_status():
+    """Monitor connection status and update UI when no data is received"""
+    global last_data_time
+    last_status = False  # Track last status sent to avoid spam
+    
+    while not shutdown_event.is_set():
+        try:
+            await asyncio.sleep(2.0)  # Check every 2 seconds instead of 1
+            
+            # Only monitor if we have active WebSocket clients
+            if not websocket_clients:
+                print("No WebSocket clients connected, skipping status update")
+                await asyncio.sleep(2.0)  # Wait longer when no clients
+                if shutdown_event.is_set():
+                    break
+                continue
+            
+            # Only update status if it's different from last sent
+            current_status = (time.time() - last_data_time) <= CONNECTION_TIMEOUT
+            
+            if current_status != last_status:
+                # Connection status changed (debug output removed)
+                await send_status_update(sim_connected=current_status)
+                last_status = current_status
+            else:
+                # Connection status unchanged (debug output removed)
+                pass
+                
+        except Exception as e:
+            print(f"Error in connection monitor: {e}")
+
+async def send_status_update(sim_connected=None, file_writing=None):
+    """Send status updates to all connected WebSocket clients"""
+    if not websocket_clients:
+        print("No WebSocket clients to send status update to")
+        return
+    
+    status_data = {"type": "status_update"}
+    if sim_connected is not None:
+        status_data["sim_connected"] = sim_connected
+    if file_writing is not None:
+        status_data["file_writing"] = file_writing
+    
+    # Send to all connected clients
+    disconnected_clients = set()
+    for websocket in websocket_clients:
+        try:
+            await websocket.send(json.dumps(status_data))
+        except websockets.exceptions.ConnectionClosed:
+            disconnected_clients.add(websocket)
+        except Exception as e:
+            print(f"Error sending status update: {e}")
+            disconnected_clients.add(websocket)
+    
+    # Remove disconnected clients
+    websocket_clients.difference_update(disconnected_clients)
+    
+    # Log if all clients were disconnected
+    if disconnected_clients:
+        print(f"Removed {len(disconnected_clients)} disconnected WebSocket clients")
+        if not websocket_clients:
+            print("All WebSocket clients disconnected, stopping status updates")
 
 # Constants for unit conversions (Aerofly uses metric, SimAPI uses imperial)
 METERS_TO_FEET = 3.28084      # Convert meters to feet
@@ -93,6 +186,10 @@ radio_state = {
         'active': '118.500',
         'standby': '118.000',
         'power': False
+    },
+    'transponder': {
+        'code': '1200',        # Current transponder code
+        'power': False         # Transponder power state
     }
 }
 
@@ -105,7 +202,7 @@ sock.setblocking(False)    # Non-blocking mode for async operation
 print(f"UDP server listening on port {UDP_PORT}")
 print(f"WebSocket server will run on port {WS_PORT}")
 
-def write_simapi_file():
+async def write_simapi_file():
     # Write the SimAPI input file with current flight data
     #
     # This function converts Aerofly FS4 data to the SimAPI format that SayIntentionsAI expects.
@@ -113,11 +210,14 @@ def write_simapi_file():
     # Rate limited to prevent excessive file writes.
     global latest_xgps, latest_xatt, last_simapi_write, radio_state
     
-    # Only write if we have data and enough time has passed (rate limiting)
-    if not latest_xgps or time.time() - last_simapi_write < 0.75:
+    # Only write if we have WebSocket clients connected and data available
+    if not websocket_clients or not latest_xgps or time.time() - last_simapi_write < 0.75:
         return
     
     try:
+        # Send file writing status update
+        await send_status_update(file_writing=True)
+        
         # Ensure directory exists
         ensure_simapi_dir()
         
@@ -149,8 +249,8 @@ def write_simapi_file():
             "NAV STANDBY FREQUENCY:1": 110.5,
             "NAV ACTIVE FREQUENCY:2": 111.0,
             "NAV STANDBY FREQUENCY:2": 111.5,
-            "TRANSPONDER CODE:1": 1200,
-            "TRANSPONDER STATE:1": 4,
+            "TRANSPONDER CODE:1": int(radio_state['transponder']['code']),
+            "TRANSPONDER STATE:1": 4 if radio_state['transponder']['power'] else 0,
             
             # Other required variables for SayIntentionsAI
             "ATC ID": "N250VB",
@@ -216,9 +316,13 @@ def write_simapi_file():
         
         last_simapi_write = time.time()
         
+        # Send file writing complete status update
+        await send_status_update(file_writing=False)
         
     except Exception as e:
         print(f"Error writing SimAPI file: {e}")
+        # Send error status
+        await send_status_update(file_writing=False)
 
 async def broadcast(websocket):
     # Main broadcast function that handles UDP data reception and WebSocket streaming
@@ -229,14 +333,26 @@ async def broadcast(websocket):
     # 3. Sends position data to WebSocket clients for moving map
     # 4. Triggers SimAPI file updates
     # 5. Handles radio state updates from web interface
-    global latest_xgps, latest_xatt, radio_state, pending_radio_update
+    global latest_xgps, latest_xatt, radio_state, pending_radio_update, last_data_time
     print(f"Client connected")
+    
+    # Update connection status based on whether we've received data recently
+    sim_connected = (time.time() - last_data_time) <= CONNECTION_TIMEOUT
+    print(f"WebSocket client connected - initial sim status: {sim_connected} (last data: {time.time() - last_data_time:.1f}s ago)")
+    await send_status_update(sim_connected=sim_connected)
+    
     try:
-        while True:
+        while not shutdown_event.is_set():
             try:
+                # Check if we should shutdown before processing UDP data
+                if shutdown_event.is_set():
+                    print("Shutdown signal received, stopping UDP processing")
+                    break
+                
                 # Receive UDP data from Aerofly FS4
                 data, addr = sock.recvfrom(1024)
                 line = data.decode().strip()
+                # UDP data received (debug output removed to reduce console clutter)
                 
 
                 # Parse different message types from Aerofly FS4
@@ -254,19 +370,34 @@ async def broadcast(websocket):
                         # Create XGPSData object to store position data
                         latest_xgps = XGPSData(sim_name, lon, lat, alt_msl_meters, heading, ground_speed_mps)
                         
-                        # Send position data to WebSocket for moving map display
-                        position_data = f"{lat},{lon},{heading}"
-                        await websocket.send(position_data)
-                        
-                        
-                        # Apply any pending radio updates when we have position data
-                        if pending_radio_update:
-                            radio_state = pending_radio_update
-                            pending_radio_update = None
-                            print("Applied pending radio update")
-                        
-                        # Write to SimAPI file for SayIntentionsAI
-                        write_simapi_file()
+                        # Only process data if we have WebSocket clients connected
+                        if websocket_clients:
+                            # Check if this is the first data received (simulator just started)
+                            was_disconnected = (time.time() - last_data_time) > CONNECTION_TIMEOUT
+                            last_data_time = time.time() # Update last data time
+                                                         # Updated last_data_time (debug output removed)
+                            
+                            # If simulator was disconnected and now sending data, update status immediately
+                            if was_disconnected:
+                                print(f"Simulator reconnected (XGPS) - sending status update: Connected")
+                                await send_status_update(sim_connected=True)
+                            
+                            # Send position data to WebSocket for moving map display
+                            position_data = f"{lat},{lon},{heading}"
+                            await websocket.send(position_data)
+                            
+                            # Apply any pending radio updates when we have position data
+                            if pending_radio_update:
+                                radio_state = pending_radio_update
+                                pending_radio_update = None
+                                print("Applied pending radio update")
+                            
+                            # Write to SimAPI file for SayIntentionsAI
+                            await write_simapi_file()
+                        else:
+                            # No clients connected, just update last_data_time silently
+                            last_data_time = time.time()
+                            # UDP data received but no clients connected - skipping processing
                         
                 elif line.startswith("XATTAerofly"):
                     # Format: XATTAerofly FS 4,heading,pitch,roll
@@ -280,8 +411,24 @@ async def broadcast(websocket):
                         # Create XATTData object to store attitude data
                         latest_xatt = XATTData(sim_name, heading, pitch, roll)
                         
-                        # Write to SimAPI file for SayIntentionsAI
-                        write_simapi_file()
+                        # Only process data if we have WebSocket clients connected
+                        if websocket_clients:
+                            # Check if this is the first data received (simulator just started)
+                            was_disconnected = (time.time() - last_data_time) > CONNECTION_TIMEOUT
+                            last_data_time = time.time() # Update last data time
+                                                         # Updated last_data_time (debug output removed)
+                            
+                            # If simulator was disconnected and now sending data, update status update immediately
+                            if was_disconnected:
+                                print(f"Simulator reconnected (XATT) - sending status update: Connected")
+                                await send_status_update(sim_connected=True)
+                            
+                            # Write to SimAPI file for SayIntentionsAI
+                            await write_simapi_file()
+                        else:
+                            # No clients connected, just update last_data_time silently
+                            last_data_time = time.time()
+                            # UDP data received but no clients connected - skipping processing
 
                 # Handle radio updates from web interface (JSON format)
                 else:
@@ -290,18 +437,25 @@ async def broadcast(websocket):
                         data = json.loads(line)
                         if data.get('type') == 'radio_update':
                             pending_radio_update = data['data'] #store for later
-                            print(f"Radio update received:")
-                            print(f"COM1: {radio_state['com1']['active']} (Power: {'ON' if radio_state['com1']['power'] else 'OFF'})")
-                            print(f"COM2: {radio_state['com2']['active']} (Power: {'ON' if radio_state['com2']['power'] else 'OFF'})")
+                            # Radio update received (debug output removed)
+                        elif data.get('type') == 'sim_data': # New type for SimAPI data
+                            # This part is not directly related to the UI status update,
+                            # but it's a good place to update last_data_time if we receive SimAPI data.
+                            last_data_time = time.time()
                     except json.JSONDecodeError:
                         # Not JSON, send as raw data for debugging
                         await websocket.send(line)
                         
             except BlockingIOError:
                 # No UDP data available, sleep briefly before checking again
+                if shutdown_event.is_set():
+                    break
                 await asyncio.sleep(0.1)
+                
     except websockets.exceptions.ConnectionClosed:
         print("Client disconnected")
+        # Update connection status
+        await send_status_update(sim_connected=False)
 
 async def handler(websocket):
     # WebSocket connection handler
@@ -310,6 +464,9 @@ async def handler(websocket):
     # - Receives radio updates from web interface
     # - Streams flight data to web interface
     # - Manages connection lifecycle
+    # Add this WebSocket to the clients set
+    websocket_clients.add(websocket)
+    
     # Handle WebSocket messages in a separate task
     async def handle_websocket_messages():
         try:
@@ -321,13 +478,74 @@ async def handler(websocket):
                     if data.get('type') == 'radio_update':
                         global pending_radio_update
                         pending_radio_update = data['data']
-                        print(f"  Radio update received:")
-                        print(f"   COM1: {radio_state['com1']['active']} (Power: {'ON' if radio_state['com1']['power'] else 'OFF'})")
-                        print(f"   COM2: {radio_state['com2']['active']} (Power: {'ON' if radio_state['com2']['power'] else 'OFF'})")
+                        # Radio update received (debug output removed)
+                    elif data.get('type') == 'shutdown':
+                        print("  Shutdown request received from web interface")
+                        
+                        # Execute the batch file to kill this process FIRST
+                        print("  Starting batch file execution...")
+                        try:
+                            import subprocess
+                            import os
+                            batch_path = os.path.join(os.path.dirname(__file__), '..', 'kill_aerofly_bridge.bat')
+                            print(f"  Executing batch file: {batch_path}")
+                            
+                            # Check if batch file exists
+                            if not os.path.exists(batch_path):
+                                print(f"  ERROR: Batch file not found at {batch_path}")
+                                # Try alternative path
+                                alt_path = os.path.join(os.getcwd(), 'kill_aerofly_bridge.bat')
+                                print(f"  Trying alternative path: {alt_path}")
+                                if os.path.exists(alt_path):
+                                    batch_path = alt_path
+                                    print(f"  Using alternative path: {batch_path}")
+                                else:
+                                    print(f"  ERROR: Batch file not found at alternative path either")
+                                    raise FileNotFoundError(f"Batch file not found at {batch_path} or {alt_path}")
+                            
+                            # Execute with better error handling
+                            result = subprocess.run([batch_path], shell=True, capture_output=True, text=True)
+                            print(f"  Batch file execution result: {result.returncode}")
+                            if result.stdout:
+                                print(f"  Batch file output: {result.stdout}")
+                            if result.stderr:
+                                print(f"  Batch file errors: {result.stderr}")
+                                
+                            if result.returncode == 0:
+                                print("  Batch file executed successfully")
+                            else:
+                                print(f"  Batch file failed with return code: {result.returncode}")
+                                
+                        except Exception as e:
+                            print(f"  Error executing batch file: {e}")
+                            import traceback
+                            traceback.print_exc()
+                        
+                        # Send acknowledgment AFTER batch file execution
+                        print("  Sending shutdown acknowledgment...")
+                        try:
+                            await websocket.send(json.dumps({"type": "shutdown_ack"}))
+                            print("  Shutdown acknowledgment sent successfully")
+                        except Exception as e:
+                            print(f"  Error sending shutdown acknowledgment: {e}")
+                        
+                        # Also trigger shutdown event as backup
+                        print("  Setting shutdown event...")
+                        shutdown_event.set()
+                        print("  Shutdown event set, returning from handler")
+                        return
                 except json.JSONDecodeError:
                     print(f"  DEBUG: Not JSON, raw message: {message}")
         except websockets.exceptions.ConnectionClosed:
             print(" WebSocket connection closed")
+        finally:
+            # Remove this WebSocket from the clients set
+            websocket_clients.discard(websocket)
+            print(f"WebSocket client removed. Total clients: {len(websocket_clients)}")
+            
+            # If no more clients, stop monitoring connection status
+            if not websocket_clients:
+                print("All WebSocket clients disconnected. Connection monitoring will pause until new clients connect.")
     
     # Run both UDP broadcast and WebSocket message handling concurrently
     await asyncio.gather(
@@ -346,9 +564,24 @@ async def main():
     print(f"  Listening on UDP {UDP_PORT} and streaming to WebSocket")
     print(f"  SimAPI file will be written to: {get_simapi_input_path()}")
     
-    #    await asyncio.Future()
     async with websockets.serve(handler, "0.0.0.0", WS_PORT):  # Listen on all interfaces
-        await asyncio.Future()  # Run indefinitely
+        # Start the connection monitoring task
+        monitor_task = asyncio.create_task(monitor_connection_status())
+        
+        # Don't send initial status until a client connects
+        # Status will be sent when the first WebSocket client connects
+        
+        # Wait for shutdown signal
+        await shutdown_event.wait()
+        print("Shutdown signal received, cleaning up...")
+        # Cancel the monitoring task
+        monitor_task.cancel()
+        try:
+            await monitor_task
+        except asyncio.CancelledError:
+            pass
+        cleanup()
+        print("Server shutdown complete")
 
 if __name__ == "__main__":
     # Start the async event loop and run the main function

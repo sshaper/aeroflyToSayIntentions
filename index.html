@@ -8,6 +8,24 @@
   <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
+  <!-- Status Bar -->
+  <div class="status-bar" id="status-bar">
+    <div class="status-left">
+      <span class="status-label">Sim Status:</span>
+      <span class="status-value" id="sim-status">Not Connected</span>
+    </div>
+    <div class="status-center">
+      <span class="status-label">File Status:</span>
+      <div class="file-indicator">
+        <!-- <span class="pulse-dot" id="pulse-dot"></span> -->
+        <span class="file-status-text" id="file-status-text">Waiting for data...</span>
+      </div>
+    </div>
+    <div class="status-right">
+      <button class="exit-button" onclick="exitApplication()">Exit Application</button>
+    </div>
+  </div>
+
   <!-- Top Row Controls -->
   <div class="top-row-controls">
     <!-- Map Type Selector -->
@@ -49,7 +67,7 @@
   <div class="search-box-container">
     <div class="control-box search-box">
       <div class="search-input-container">
-        <input type="text" id="airport-search" placeholder="Enter ICAO or COM freq" maxlength="7" onfocus="showVRKeyboard()">
+        <input type="text" id="airport-search" placeholder="Enter ICAO, XPNDR or COM freq" maxlength="7" onfocus="showVRKeyboard()">
         <div class="search-buttons">
           <button class="go-to-button" onclick="searchAirport()">Go To</button>
           <button class="clear-search-button" onclick="clearSearch()">Clear</button>

@@ -1,3 +1,87 @@
+/* Status Bar Styles */
+.status-bar {
+  background: linear-gradient(90deg, #4CAF50, #45a049);
+  color: white;
+  padding: 8px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.status-left, .status-center, .status-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-label {
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.status-value {
+  font-weight: 400;
+}
+
+.file-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #fff;
+  border-radius: 50%;
+  opacity: 0.8;
+}
+
+.pulse-dot.pulsing {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+}
+
+.exit-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.exit-button:hover {
+  background-color: #d32f2f;
+}
+
+.exit-button:active {
+  background-color: #b71c1c;
+}
+
 html, body { 
   height: 100%; 
   margin: 0; 
@@ -34,7 +118,7 @@ html, body {
 /* Top Row Controls */
 .top-row-controls {
   position: fixed;
-  top: 20px;
+  top: 60px; /* Moved down from 20px to clear the status bar */
   left: 60px; /* Space for zoom controls */
   display: flex;
   gap: 10px;
@@ -120,7 +204,7 @@ html, body {
 /* Search Box (Upper Right) */
 .search-box-container {
   position: fixed;
-  top: 20px;
+  top: 60px; /* Moved down from 20px to clear the status bar */
   left: 603px;
   z-index: 1000;
 }
@@ -199,8 +283,8 @@ html, body {
   border: 2px solid #007bff;
   border-radius: 8px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-  max-width: 712px;
-  max-height: 420px;
+  max-width: 900px;
+  max-height: 500px;
   overflow: hidden;
 }
 
@@ -248,7 +332,7 @@ html, body {
 
 .keyboard-grid {
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
+  grid-template-columns: repeat(11, 1fr);
   gap: 8px;
   max-height: 300px;
   overflow-y: auto;
@@ -307,10 +391,32 @@ html, body {
   background-color: #218838;
 }
 
+.keyboard-key.xpdr-button {
+  grid-column: span 1;
+  background-color: #fd7e14;
+  color: white;
+  font-size: 12px;
+}
+
+.keyboard-key.xpdr-button:hover {
+  background-color: #e8690b;
+}
+
+.keyboard-key.empty-slot {
+  background-color: #f8f9fa;
+  border: 1px dashed #dee2e6;
+  cursor: default;
+}
+
+.keyboard-key.empty-slot:hover {
+  background-color: #f8f9fa;
+  border-color: #dee2e6;
+}
+
 /* Second Row Controls */
 .second-row-controls {
   position: fixed;
-  top: 80px;
+  top: 120px; /* Moved down from 80px to maintain proper spacing */
   left: 60px; /* Space for zoom controls */
   display: flex;
   gap: 15px;
@@ -516,7 +622,7 @@ html, body {
 /* Airport Frequency Panel */
 .airport-frequency-panel {
   position: fixed;
-  top: 166px;
+  top: 206px; /* Moved down from 166px to maintain proper spacing */
   right: 20px;
   width: 350px;
   max-height: 400px;

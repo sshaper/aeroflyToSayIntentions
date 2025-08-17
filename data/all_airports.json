@@ -92415,6 +92415,16 @@
       }
     ]
   },
+{
+    "icao": "LSSCHH",
+    "name": "Schilthorn",
+    "type": "Heliport",
+    "lat": 46.5574,
+    "lon": 7.8348,
+    "link": "unavailable",
+    "freq": []
+  },
+
   {
     "icao": "LSGS",
     "name": "Sion Airport",

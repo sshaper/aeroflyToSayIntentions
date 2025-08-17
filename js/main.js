@@ -10,6 +10,95 @@
 // - Real-time aircraft position tracking
 // - WebSocket communication with Python backend
 
+// Status management functions
+let simConnected = false;
+let lastFileWriteTime = 0;
+
+function updateSimStatus(connected) {
+    simConnected = connected;
+    const statusElement = document.getElementById('sim-status');
+    if (connected) {
+        statusElement.textContent = 'Connected';
+        statusElement.style.color = '#fff';
+    } else {
+        statusElement.textContent = 'Not Connected';
+        statusElement.style.color = '#ffeb3b';
+        // Reset file status when simulator disconnects
+        if (lastFileWriteTime > 0) {
+            lastFileWriteTime = 0;
+            updateFileWriteStatus(false);
+        }
+    }
+}
+
+function updateFileWriteStatus(writing) {
+    //const pulseDot = document.getElementById('pulse-dot');
+    const fileStatusText = document.getElementById('file-status-text');
+    
+    if (writing) {
+        //pulseDot.classList.add('pulsing');
+        //fileStatusText.textContent = 'Writing to file...';
+        lastFileWriteTime = Date.now();
+    } else {
+        //pulseDot.classList.remove('pulsing');
+        if (lastFileWriteTime > 0) {
+            // Show the actual time when file was last written
+            const lastWriteDate = new Date(lastFileWriteTime);
+            const timeString = lastWriteDate.toLocaleTimeString();
+            fileStatusText.textContent = `Last written: ${timeString}`;
+        } else {
+            fileStatusText.textContent = 'Waiting for data...';
+        }
+    }
+}
+
+function exitApplication() {
+    if (confirm('Are you sure you want to exit the application? This will shut down the server and close all windows.')) {
+        // Send shutdown signal to Python server to execute the batch file
+        if (window.radioWebSocket && window.radioWebSocket.readyState === WebSocket.OPEN) {
+            window.radioWebSocket.send(JSON.stringify({type: 'shutdown'}));
+            console.log('Shutdown signal sent to server');
+        }
+        
+        // Close WebSocket connection
+        if (window.radioWebSocket) {
+            window.radioWebSocket.close();
+            console.log('WebSocket connection closed');
+        }
+        
+        // Note: The Python server will execute the batch file to shut itself down
+        
+
+        
+        // Close the web interface with multiple attempts
+        setTimeout(() => {
+            try {
+                // Try to close the window
+                window.close();
+                console.log('Web interface closed');
+            } catch (e) {
+                console.log('Could not close web interface:', e);
+                // Try alternative methods
+                try {
+                    // Navigate away first, then try to close
+                    window.location.href = 'about:blank';
+                    setTimeout(() => {
+                        try {
+                            window.close();
+                        } catch (e2) {
+                            console.log('Final close attempt failed:', e2);
+                            // Last resort: show message to user
+                            document.body.innerHTML = '<h2>Application Shutdown</h2><p>Please close this browser tab manually.</p>';
+                        }
+                    }, 500);
+                } catch (e2) {
+                    console.log('Alternative close methods failed:', e2);
+                }
+            }
+        }, 2000);
+    }
+}
+
 // Radio state management - stores current frequencies and power states for COM1 and COM2
 const radioState = {
   com1: {
@@ -21,6 +110,10 @@ const radioState = {
     active: '118.500',
     standby: '118.000',
     power: false
+  },
+  transponder: {
+    code: '1200',         // Current transponder code
+    power: false          // Transponder power state (on/off)
   }
 };
 
@@ -683,8 +776,37 @@ function connectWebSocket() {
   };
 
   socket.onmessage = (event) => {
+    // Try to parse as JSON first (for status messages)
+    try {
+      const data = JSON.parse(event.data);
+      
+      // Handle different message types
+      if (data.type === 'status_update') {
+        if (data.sim_connected !== undefined) {
+          updateSimStatus(data.sim_connected);
+        }
+        if (data.file_writing !== undefined) {
+          updateFileWriteStatus(data.file_writing);
+        }
+        return; // Don't process as position data
+      }
+      
+      if (data.type === 'shutdown_ack') {
+        console.log('Server acknowledged shutdown request');
+        return;
+      }
+      
+    } catch (e) {
+      // Not JSON, treat as position data
+    }
+    
     // Handle position data from Aerofly FS4 (format: "lat,lon,heading")
     const [lat, lon, heading] = event.data.split(',').map(Number);
+    
+    // Check if we got valid position data
+    if (isNaN(lat) || isNaN(lon)) {
+      return; // Invalid data, skip processing
+    }
     
     // Store current aircraft position for direct-to functionality
     currentAircraftPosition = { lat, lon };
@@ -819,19 +941,12 @@ function hideVRKeyboard() {
 function generateKeyboardKeys() {
   const keyboardGrid = document.getElementById('keyboard-grid');
   
-  // Define the keys for ICAO codes and frequencies (letters, numbers, and period)
-  const keys = [
-    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
-    'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
-    'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3',
-    '4', '5', '6', '7', '8', '9', '.'
-  ];
-  
   // Clear existing keys
   keyboardGrid.innerHTML = '';
   
-  // Create key elements
-  keys.forEach(key => {
+  // Row 1: A-K (11 keys)
+  const row1Keys = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'];
+  row1Keys.forEach(key => {
     const keyElement = document.createElement('div');
     keyElement.className = 'keyboard-key';
     keyElement.textContent = key;
@@ -839,28 +954,69 @@ function generateKeyboardKeys() {
     keyboardGrid.appendChild(keyElement);
   });
   
-  // Add backspace key
-  const backspaceKey = document.createElement('div');
-  backspaceKey.className = 'keyboard-key backspace';
-  backspaceKey.textContent = '⌫';
-  backspaceKey.onclick = () => backspace();
-  keyboardGrid.appendChild(backspaceKey);
-
-  // Add COM 1 button
-  const com1Key = document.createElement('div');
-  com1Key.className = 'keyboard-key com-button';
-  com1Key.textContent = 'com 1';
-  com1Key.onclick = () => setComFrequency('com1');
-  keyboardGrid.appendChild(com1Key);
+  // Row 2: L-V (11 keys)
+  const row2Keys = ['L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V'];
+  row2Keys.forEach(key => {
+    const keyElement = document.createElement('div');
+    keyElement.className = 'keyboard-key';
+    keyElement.textContent = key;
+    keyElement.onclick = () => typeKey(key);
+    keyboardGrid.appendChild(keyElement);
+  });
   
-  // Add COM 2 button
-  const com2Key = document.createElement('div');
-  com2Key.className = 'keyboard-key com-button';
-  com2Key.textContent = 'com 2';
-  com2Key.onclick = () => setComFrequency('com2');
-  keyboardGrid.appendChild(com2Key);
+  // Row 3: W-6 (11 keys)
+  const row3Keys = ['W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6'];
+  row3Keys.forEach(key => {
+    const keyElement = document.createElement('div');
+    keyElement.className = 'keyboard-key';
+    keyElement.textContent = key;
+    keyElement.onclick = () => typeKey(key);
+    keyboardGrid.appendChild(keyElement);
+  });
   
+  // Row 4: 7-9, ., ⌫, com 1, com 2, XPDR, and 3 empty slots (11 keys total)
+  const row4Keys = ['7', '8', '9', '.', '⌫', 'com 1', 'com 2', 'XPDR'];
+  row4Keys.forEach(key => {
+    if (key === '⌫') {
+      const backspaceKey = document.createElement('div');
+      backspaceKey.className = 'keyboard-key backspace';
+      backspaceKey.textContent = key;
+      backspaceKey.onclick = () => backspace();
+      keyboardGrid.appendChild(backspaceKey);
+    } else if (key === 'com 1') {
+      const com1Key = document.createElement('div');
+      com1Key.className = 'keyboard-key com-button';
+      com1Key.textContent = key;
+      com1Key.onclick = () => setComFrequency('com1');
+      keyboardGrid.appendChild(com1Key);
+    } else if (key === 'com 2') {
+      const com2Key = document.createElement('div');
+      com2Key.className = 'keyboard-key com-button';
+      com2Key.textContent = key;
+      com2Key.onclick = () => setComFrequency('com2');
+      keyboardGrid.appendChild(com2Key);
+    } else if (key === 'XPDR') {
+      const xpdrKey = document.createElement('div');
+      xpdrKey.className = 'keyboard-key xpdr-button';
+      xpdrKey.textContent = key;
+      xpdrKey.onclick = () => setTransponder();
+      keyboardGrid.appendChild(xpdrKey);
+    } else {
+      const keyElement = document.createElement('div');
+      keyElement.className = 'keyboard-key';
+      keyElement.textContent = key;
+      keyElement.onclick = () => typeKey(key);
+      keyboardGrid.appendChild(keyElement);
+    }
+  });
   
+  // Add 3 empty slots for future expansion
+  for (let i = 0; i < 3; i++) {
+    const emptyKey = document.createElement('div');
+    emptyKey.className = 'keyboard-key empty-slot';
+    emptyKey.textContent = '';
+    keyboardGrid.appendChild(emptyKey);
+  }
 }
 
 function typeKey(key) {
@@ -900,6 +1056,35 @@ function setComFrequency(com) {
   searchInput.focus();
   
   console.log(`Set ${com} standby frequency to ${frequency}`);
+}
+
+function setTransponder() {
+  const searchInput = document.getElementById('airport-search');
+  const code = searchInput.value.trim();
+  
+  if (!code) {
+    alert('Please enter a transponder code first');
+    return;
+  }
+  
+  // Validate transponder code (4 digits, 0000-7777)
+  if (!/^[0-7]{4}$/.test(code)) {
+    alert('Transponder code must be 4 digits (0-7 only)');
+    return;
+  }
+  
+  // Update the radio state with the new transponder code
+  radioState.transponder.code = code;
+  radioState.transponder.power = true; // Enable transponder when code is set
+  
+  // Send the updated radio state to the Python backend
+  updateSimAPI();
+  
+  console.log(`Set transponder code to ${code}`);
+  
+  // Clear the input and keep focus
+  searchInput.value = '';
+  searchInput.focus();
 }
 
 // Close keyboard when clicking outside
