@@ -136,7 +136,13 @@ MPS_TO_FPM = 196.85           # Convert meters per second to feet per minute
 # SimAPI file paths - SayIntentionsAI reads from a specific location
 def get_local_appdata_path():
     # Get the local appdata directory path where SayIntentionsAI expects SimAPI files
-    return os.path.join(os.environ.get('LOCALAPPDATA', ''), 'SayIntentionsAI')
+    # Cross-platform support for Windows and macOS
+    if os.name == 'nt':  # Windows
+        return os.path.join(os.environ.get('LOCALAPPDATA', ''), 'SayIntentionsAI')
+    else:  # macOS/Linux
+        # Use ~/Library/Application Support for macOS
+        home = os.path.expanduser('~')
+        return os.path.join(home, 'Library', 'Application Support', 'SayIntentionsAI')
 
 def ensure_simapi_dir():
     # Ensure the SayIntentionsAI directory exists in local appdata
