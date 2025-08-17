@@ -13,12 +13,14 @@ html, body {
   font-size: 15px;
   text-align: center;
   line-height: 15px;
+  font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Android Emoji', 'EmojiSymbols', 'EmojiOne Mozilla', 'Twemoji Mozilla', 'Segoe UI Symbol', Arial, sans-serif;
 }
 
 .airport-icon {
   font-size: 20px;
   text-align: center;
   line-height: 20px;
+  font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Android Emoji', 'EmojiSymbols', 'EmojiOne Mozilla', 'Twemoji Mozilla', 'Segoe UI Symbol', Arial, sans-serif;
 }
 
 /* Control Box Base Styles */

@@ -234,15 +234,18 @@ fetch('data/all_airports.json?cacheBust=' + Date.now())
   allAirportsData = airports;
   
   airports.forEach(airport => {
-    // Choose icon based on airport type
+    // Choose icon based on airport type with fallback for emoji support
     let iconHtml = '🏢'; // Default airport icon
+    let fallbackText = 'APT'; // Fallback text if emoji doesn't render
+    
     if (airport.type === 'Heliport') {
       iconHtml = '🚁'; // Heliport icon
+      fallbackText = 'HELI';
     }
     
-    // Create custom airport icon
+    // Create custom airport icon with emoji fallback
     const airportIcon = L.divIcon({
-      html: iconHtml,
+      html: `<span style="font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Android Emoji', 'EmojiSymbols', 'EmojiOne Mozilla', 'Twemoji Mozilla', 'Segoe UI Symbol', Arial, sans-serif;">${iconHtml}</span><span style="font-size: 8px; display: block; margin-top: -2px;">${fallbackText}</span>`,
       className: 'airport-icon',
       iconSize: [20, 20],
       iconAnchor: [10, 10]
@@ -347,7 +350,7 @@ function directToAirport(icao) {
   
   // Create route endpoint markers
   const routeIcon = L.divIcon({
-    html: '📍',
+    html: '<span style="font-family: \'Apple Color Emoji\', \'Segoe UI Emoji\', \'Noto Color Emoji\', \'Android Emoji\', \'EmojiSymbols\', \'EmojiOne Mozilla\', \'Twemoji Mozilla\', \'Segoe UI Symbol\', Arial, sans-serif;">📍</span>',
     className: 'route-marker',
     iconSize: [25, 25],
     iconAnchor: [12, 25]
@@ -449,7 +452,7 @@ function drawRoute() {
 
   // Create route endpoint markers
   const routeIcon = L.divIcon({
-    html: '📍',
+    html: '<span style="font-family: \'Apple Color Emoji\', \'Segoe UI Emoji\', \'Noto Color Emoji\', \'Android Emoji\', \'EmojiSymbols\', \'EmojiOne Mozilla\', \'Twemoji Mozilla\', \'Segoe UI Symbol\', Arial, sans-serif;">📍</span>',
     className: 'route-marker',
     iconSize: [25, 25],
     iconAnchor: [12, 25]
@@ -571,7 +574,7 @@ function addRouteActionsToPanel(airport) {
 
 // Create a custom aircraft icon for the moving map
 const aircraftIcon = L.divIcon({
-  html: '✈️',
+  html: '<span style="font-family: \'Apple Color Emoji\', \'Segoe UI Emoji\', \'Noto Color Emoji\', \'Android Emoji\', \'EmojiSymbols\', \'EmojiOne Mozilla\', \'Twemoji Mozilla\', \'Segoe UI Symbol\', Arial, sans-serif;">✈️</span>',
   className: 'aircraft-icon',
   iconSize: [15, 15],
   iconAnchor: [7.5, 7.5]
