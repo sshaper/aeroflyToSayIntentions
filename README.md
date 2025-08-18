@@ -10,7 +10,7 @@ Shows the status bar at the top and the updated keyboard
 ![Latest Interface](screenshots/update8172025.png)
 
 
-**Update 8/10/2025**  Feature was added to put 5nm and 10nm rings around any airport or multiple airports.
+**Update 8/10/2025**  Feature was added to put 5nm and 10nm rings around any airport or multiple airports. It also shows the dialog box of airport frequencies that pops up when the airport is clicked.  Just click on com 1 or com 2 and that frequency will be popluated in the standby (orange) area for com 1 or com 2.  Click the swap button and it will be the active frequency.
 
 Shows the 5nm and 10nm rings
 ![Latest Interface](screenshots/update8102025.png)
