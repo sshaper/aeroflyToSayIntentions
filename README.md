@@ -4,7 +4,7 @@ This application contains a moving map that lists all the airports in Aerofly FS
 
 **VERY IMPORTANT:** Read the [instructions.pdf](instructions.pdf) file to see how to set up and install this application.
 
-**Update 8/17/2025** A status bar was added to the top to show that you are connected to the sim or not.  Also a file status that show last time it wrote to Say Intentions file.  It does this every second so the ime will increment per second.  Also you can now add a transponder code.  The button was added to the keyboard named XPDR enter your transponder code and click the button.  The transponder code will appear in the upper right textbox.  To get the keyboard you click the text box in the upper right corner.  Finally, a "Exit Application" button was added so the application will exit and all processes and command windows will automatically be closed.
+**Update 8/17/2025** A status bar was added to the top to show that you are connected to the sim or not.  Also a file status that show last time it wrote to Say Intentions file.  It does this every second so the time will increment per second.  Also you can now add a transponder code.  The button was added to the keyboard named XPDR enter your transponder code and click the button.  The transponder code will appear in the upper right textbox as you are typing it.  To get the keyboard you click the text box in the upper right corner.  Finally, a "Exit Application" button was added so the application will exit and all processes and command windows will automatically be closed.
 
 Shows the status bar at the top and the updated keyboard
 ![Latest Interface](screenshots/update8172025.png)
