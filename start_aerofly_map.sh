@@ -1,5 +1,28 @@
 #!/bin/bash
 
+# Function to cleanup on exit
+cleanup() {
+    echo -e "\nReceived interrupt signal, cleaning up..."
+    if [ ! -z "$UDP_PID" ]; then
+        kill -TERM $UDP_PID 2>/dev/null
+    fi
+    if [ ! -z "$HTTP_PID" ]; then
+        kill -TERM $HTTP_PID 2>/dev/null
+    fi
+    sleep 1
+    if [ ! -z "$UDP_PID" ]; then
+        kill -KILL $UDP_PID 2>/dev/null
+    fi
+    if [ ! -z "$HTTP_PID" ]; then
+        kill -KILL $HTTP_PID 2>/dev/null
+    fi
+    echo "Cleanup complete."
+    exit 0
+}
+
+# Set up signal handlers
+trap cleanup SIGINT SIGTERM
+
 echo "Starting Aerofly Moving Map..."
 echo
 
@@ -35,6 +58,25 @@ echo "To stop the servers, press Ctrl+C or run: kill $UDP_PID $HTTP_PID"
 echo
 
 # Wait for user input to stop
-read -p "Press Enter to stop the servers..."
-kill $UDP_PID $HTTP_PID
+echo "Press Enter to stop the servers..."
+read
+
+# Gracefully stop the servers
+echo "Stopping servers gracefully..."
+kill -TERM $UDP_PID $HTTP_PID
+
+# Wait a moment for graceful shutdown
+sleep 2
+
+# Force kill if still running
+if kill -0 $UDP_PID 2>/dev/null; then
+    echo "Force stopping UDP server..."
+    kill -KILL $UDP_PID
+fi
+
+if kill -0 $HTTP_PID 2>/dev/null; then
+    echo "Force stopping HTTP server..."
+    kill -KILL $HTTP_PID
+fi
+
 echo "Servers stopped."
