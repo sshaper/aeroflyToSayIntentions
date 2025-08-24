@@ -524,31 +524,29 @@ async def handler(websocket):
                                     print(f"  ERROR: Shutdown script not found at alternative path either")
                                     raise FileNotFoundError(f"Shutdown script not found at {script_path} or {alt_path}")
                             
-                            # Execute with platform-appropriate settings
+                            # Execute with platform-appropriate settings (non-blocking)
+                            print("  Starting shutdown script (non-blocking)...")
                             if system == "windows":
-                                result = subprocess.run([script_path], shell=True, capture_output=True, text=True)
+                                # For Windows, use Popen to avoid blocking
+                                process = subprocess.Popen([script_path], shell=True, 
+                                                         stdout=subprocess.PIPE, 
+                                                         stderr=subprocess.PIPE)
                             else:
                                 # For macOS/Linux, make sure script is executable and run it
                                 os.chmod(script_path, 0o755)
-                                result = subprocess.run([script_path], shell=False, capture_output=True, text=True)
+                                process = subprocess.Popen([script_path], shell=False,
+                                                         stdout=subprocess.PIPE, 
+                                                         stderr=subprocess.PIPE)
                             
-                            print(f"  Shutdown script execution result: {result.returncode}")
-                            if result.stdout:
-                                print(f"  Shutdown script output: {result.stdout}")
-                            if result.stderr:
-                                print(f"  Shutdown script errors: {result.stderr}")
-                                
-                            if result.returncode == 0:
-                                print("  Shutdown script executed successfully")
-                            else:
-                                print(f"  Shutdown script failed with return code: {result.returncode}")
+                            print("  Shutdown script started successfully (non-blocking)")
+                            # Don't wait for the script to complete since it will kill this process
                                 
                         except Exception as e:
                             print(f"  Error executing shutdown script: {e}")
                             import traceback
                             traceback.print_exc()
                         
-                        # Send acknowledgment AFTER batch file execution
+                        # Send acknowledgment
                         print("  Sending shutdown acknowledgment...")
                         try:
                             await websocket.send(json.dumps({"type": "shutdown_ack"}))
@@ -556,8 +554,11 @@ async def handler(websocket):
                         except Exception as e:
                             print(f"  Error sending shutdown acknowledgment: {e}")
                         
-                        # Also trigger shutdown event as backup
-                        print("  Setting shutdown event...")
+                        # Give shutdown script a moment to start, then trigger shutdown event as backup
+                        print("  Waiting 1 second for shutdown script to start...")
+                        await asyncio.sleep(1)
+                        
+                        print("  Setting shutdown event as backup...")
                         shutdown_event.set()
                         print("  Shutdown event set, returning from handler")
                         return
