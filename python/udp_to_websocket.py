@@ -489,42 +489,62 @@ async def handler(websocket):
                     elif data.get('type') == 'shutdown':
                         print("  Shutdown request received from web interface")
                         
-                        # Execute the batch file to kill this process FIRST
-                        print("  Starting batch file execution...")
+                        # Execute the appropriate shutdown script based on platform
+                        print("  Starting shutdown script execution...")
                         try:
                             import subprocess
                             import os
-                            batch_path = os.path.join(os.path.dirname(__file__), '..', 'kill_aerofly_bridge.bat')
-                            print(f"  Executing batch file: {batch_path}")
+                            import platform
                             
-                            # Check if batch file exists
-                            if not os.path.exists(batch_path):
-                                print(f"  ERROR: Batch file not found at {batch_path}")
+                            # Determine platform and choose appropriate shutdown script
+                            system = platform.system().lower()
+                            if system == "windows":
+                                script_name = "kill_aerofly_bridge.bat"
+                                shell_cmd = True
+                            elif system == "darwin":  # macOS
+                                script_name = "kill_aerofly_bridge.sh"
+                                shell_cmd = False
+                            else:  # Linux or other Unix-like systems
+                                script_name = "kill_aerofly_bridge.sh"
+                                shell_cmd = False
+                            
+                            script_path = os.path.join(os.path.dirname(__file__), '..', script_name)
+                            print(f"  Executing {system} shutdown script: {script_path}")
+                            
+                            # Check if script exists
+                            if not os.path.exists(script_path):
+                                print(f"  ERROR: Shutdown script not found at {script_path}")
                                 # Try alternative path
-                                alt_path = os.path.join(os.getcwd(), 'kill_aerofly_bridge.bat')
+                                alt_path = os.path.join(os.getcwd(), script_name)
                                 print(f"  Trying alternative path: {alt_path}")
                                 if os.path.exists(alt_path):
-                                    batch_path = alt_path
-                                    print(f"  Using alternative path: {batch_path}")
+                                    script_path = alt_path
+                                    print(f"  Using alternative path: {script_path}")
                                 else:
-                                    print(f"  ERROR: Batch file not found at alternative path either")
-                                    raise FileNotFoundError(f"Batch file not found at {batch_path} or {alt_path}")
+                                    print(f"  ERROR: Shutdown script not found at alternative path either")
+                                    raise FileNotFoundError(f"Shutdown script not found at {script_path} or {alt_path}")
                             
-                            # Execute with better error handling
-                            result = subprocess.run([batch_path], shell=True, capture_output=True, text=True)
-                            print(f"  Batch file execution result: {result.returncode}")
+                            # Execute with platform-appropriate settings
+                            if system == "windows":
+                                result = subprocess.run([script_path], shell=True, capture_output=True, text=True)
+                            else:
+                                # For macOS/Linux, make sure script is executable and run it
+                                os.chmod(script_path, 0o755)
+                                result = subprocess.run([script_path], shell=False, capture_output=True, text=True)
+                            
+                            print(f"  Shutdown script execution result: {result.returncode}")
                             if result.stdout:
-                                print(f"  Batch file output: {result.stdout}")
+                                print(f"  Shutdown script output: {result.stdout}")
                             if result.stderr:
-                                print(f"  Batch file errors: {result.stderr}")
+                                print(f"  Shutdown script errors: {result.stderr}")
                                 
                             if result.returncode == 0:
-                                print("  Batch file executed successfully")
+                                print("  Shutdown script executed successfully")
                             else:
-                                print(f"  Batch file failed with return code: {result.returncode}")
+                                print(f"  Shutdown script failed with return code: {result.returncode}")
                                 
                         except Exception as e:
-                            print(f"  Error executing batch file: {e}")
+                            print(f"  Error executing shutdown script: {e}")
                             import traceback
                             traceback.print_exc()
                         
