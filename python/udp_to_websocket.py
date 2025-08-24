@@ -554,13 +554,8 @@ async def handler(websocket):
                         except Exception as e:
                             print(f"  Error sending shutdown acknowledgment: {e}")
                         
-                        # Give shutdown script a moment to start, then trigger shutdown event as backup
-                        print("  Waiting 1 second for shutdown script to start...")
-                        await asyncio.sleep(1)
-                        
-                        print("  Setting shutdown event as backup...")
-                        shutdown_event.set()
-                        print("  Shutdown event set, returning from handler")
+                        # Shutdown script should handle everything, just return immediately
+                        print("  Shutdown script started, returning from handler")
                         return
                 except json.JSONDecodeError:
                     print(f"  DEBUG: Not JSON, raw message: {message}")
